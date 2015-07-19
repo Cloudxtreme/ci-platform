@@ -5,7 +5,10 @@ To use it:
 
 1. clone this repostory
 2. clone the secrets repository:
-    - git clone <secrets-repo> group_vars
+    - git clone <secrets-repo> secrets
+3. ln -s group_vars secrets/ci-platform
+
+Note: the ansible 'vault' file is not currently used, as soon it is required, it should be moved to the secrets-repo and symlinked.
 
 The secrets-repo above contains the YAML dictionary (group_vars/all.yaml) used by Ansible to configure the instance.
 
