@@ -1,0 +1,14 @@
+.vagrant
+.ansible-disk-sdb
+.bundle
+.idea
+.tags
+vendor
+*.pyc
+tags
+Vagrantfile
+group_vars/
+roles/Azulinho.azulinho-*
+roles/joshualund*
+*.bak
+*.old

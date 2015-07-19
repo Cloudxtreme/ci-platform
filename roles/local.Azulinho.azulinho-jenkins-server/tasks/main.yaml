@@ -1,0 +1,126 @@
+---
+
+# Creates a user for jenkins with the correct ssh key retrieved from the secrets
+# repository
+#
+- name: create user for jenkins
+  user: name=jenkins
+    comment="Jenkins CI"
+    home="/var/lib/jenkins"
+    shell="/bin/bash"
+  tags: ['jenkins']
+
+- name: make sure /var/lib/jenkins/.ssh exists
+  file: path=/var/lib/jenkins/.ssh
+    owner=jenkins
+    group=jenkins
+    mode=0700
+    state=directory
+  tags: ['jenkins']
+
+# We install a specific version of jenkins to avoid compability
+# issues with plugins
+#
+- name: unlock jenkins version in yum
+  lineinfile: dest=/etc/yum/pluginconf.d/versionlock.list
+    state=absent
+    regexp='^.:jenkins-.*'
+  tags: ['jenkins', 'versionlock']
+
+- name: Ensure jenkins is installed
+  yum: name=jenkins-{{ azulinho_jenkins_server['version']}}
+    enablerepo=epel
+    state=present
+  register: _jenkins_install
+  tags: ['jenkins', 'versionlock']
+
+- name: lock jenkins
+  command: yum versionlock jenkins-{{ azulinho_jenkins_server['version'] }}
+  tags: ['jenkins', 'versionlock']
+
+# configure jenkins to our liking
+#
+- name: Configure Jenkins Port
+  sudo: yes
+  when: azulinho_jenkins_server['port'] is defined
+  lineinfile: dest=/etc/default/jenkins
+    regexp=^HTTP_PORT=
+    line=HTTP_PORT={{ azulinho_jenkins_server['port'] }}
+    create=yes
+  tags: ['jenkins']
+
+- name: Configure Jenkins Prefix
+  sudo: yes
+  when: azulinho_jenkins_server['prefix'] is defined
+  lineinfile: dest=/etc/default/jenkins
+    regexp=^PREFIX=
+    line=PREFIX={{ azulinho_jenkins_server['prefix'] }}
+  tags: ['jenkins']
+
+- name: Configure Jenkins E-mail
+  sudo: yes
+  when: azulinho_jenkins_server['email'] is defined
+  template: src=hudson.tasks.Mailer.xml.j2
+    dest={{ azulinho_jenkins_server['lib'] }}/hudson.tasks.Mailer.xml
+    owner=jenkins
+    group=jenkins
+    mode=0644
+  tags: ['jenkins']
+
+- name: Deploy main jenkins config.xml file
+  template: dest=/var/lib/jenkins/config.xml
+    src=config.xml.j2
+  tags: ['jenkins']
+
+- name: update jenkins main config.xml file
+  file: path=/var/lib/jenkins/config.xml
+        state=file
+        owner=jenkins
+        group=jenkins
+  tags: ['jenkins']
+
+- name: Deploy GlobalStats plugin config
+  template: dest=/var/lib/jenkins/org.jenkinsci.plugins.statsd.StatsdConfig.xml
+    src=org.jenkinsci.plugins.statsd.StatsdConfig.xml.j2
+  tags: ['jenkins']
+
+- name: update jenkins GlobalStats plugin config
+  file: path=/var/lib/jenkins/org.jenkinsci.plugins.statsd.StatsdConfig.xml
+        state=file
+        owner=jenkins
+        group=jenkins
+  tags: ['jenkins']
+
+
+# Start jenkins, we need it up and running before we are able to download
+# the CLI tool
+- name: Ensure jenkins is running
+  service: name=jenkins
+    enabled=yes
+    state=running
+  tags: ['jenkins', 'initscripts']
+
+# If Jenkins is installed or updated, wait for pulling the Jenkins CLI
+# # wish there was a jenkins-cli rpm package
+#
+- name: "{{ startup_delay_s | default(90) }}s delay while starting Jenkins"
+  wait_for: port={{ azulinho_jenkins_server['port'] }}
+    delay={{ azulinho_jenkins_server['startup_delay_s'] | default(90) }}
+  when: _jenkins_install.changed
+  tags: ['jenkins']
+
+# Create Jenkins CLI destination directory
+- name: "Create Jenkins CLI destination directory"
+  file: path={{ azulinho_jenkins_server['dest'] }}
+    state=directory
+  sudo: yes
+  tags: ['jenkins', 'jenkinscli']
+
+# Get Jenkins CLI from localhost
+- name: Get Jenkins CLI
+  get_url: url=http://localhost:{{ azulinho_jenkins_server['port'] }}/jnlpJars/jenkins-cli.jar
+    dest={{ azulinho_jenkins_server['cli_dest'] }}
+    mode=0440
+  sudo: yes
+  tags: ['jenkins', 'jenkinscli']
+
