@@ -6,9 +6,9 @@ To use it:
 1. clone this repostory
 2. clone the secrets repository:
     - git clone <secrets-repo> secrets
-3. ln -s group_vars secrets/ci-platform
+3. ln -s secrets/ci-platform group_vars
 4. install ansible:
-    - pip2 install ansible==1.6.2
+    - pip2 install ansible==1.9.2
 
 Note: the ansible 'vault' file is not currently used, as soon it is required, it should be moved to the secrets-repo and symlinked.
 
