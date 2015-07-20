@@ -17,20 +17,39 @@
   when: _jenkins_updates.changed
   tags: ['jenkins', 'jenkins_plugins']
 
-- name: Install plugins
-  sudo: yes
-  command: java -jar {{ azulinho_jenkins_plugins['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_plugins['port'] }} install-plugin http://updates.jenkins-ci.org/download/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.hpi
+- name: create /var/lib/jenkins/plugins
+  file: path="{{ azulinho_jenkins_plugins['plugins_dir'] }}"
+    state=directory
+    owner=jenkins
+    group=jenkins
+  tags: ['jenkins', 'jenkins_plugins']
+
+- name: install wget
+  yum: name=wget
+    state=present
+  tags: ['jenkins', 'jenkins_plugins']
+
+- name: download and install plugins
+  command: wget -c http://mirrors.jenkins-ci.org/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.hpi
+    chdir={{ azulinho_jenkins_plugins['plugins_dir'] }}
   with_items: azulinho_jenkins_plugins['plugins']
   tags: ['jenkins', 'jenkins_plugins']
 
-- name: Install plugins
-  sudo: yes
-  command: java -jar {{ azulinho_jenkins_plugins['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_plugins['port'] }} install-plugin {{ item }}
+    # Some plugins are not available on the jenkins website
+- name: download and install plugins (non-published)
+  command: wget -c {{ item }}
+    chdir={{ azulinho_jenkins_plugins['plugins_dir'] }}
   with_items: azulinho_jenkins_plugins['non_published_plugins']
   tags: ['jenkins', 'jenkins_plugins']
 
+- name: update plugin file ownership to jenkins
+  file: path={{ item }}
+    owner=jenkins
+    group=jenkins
+  with_fileglob: "{{ azulinho_jenkins_plugins['plugins_dir'] }}"
+  tags: ['jenkins', 'jenkins_plugins']
+
 - name: safe-restart jenkins
-  sudo: yes
   command: java -jar {{ azulinho_jenkins_plugins['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_plugins['port'] }} safe-restart
   tags: ['jenkins', 'jenkins_plugins']
 
