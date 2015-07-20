@@ -12,3 +12,6 @@ roles/Azulinho.azulinho-*
 roles/joshualund*
 *.bak
 *.old
+group_vars
+secrets
+segredos
