@@ -21,6 +21,7 @@ ansible_roles = [
   'Azulinho.azulinho-jenkins-reconfigure-jobs-using-jinja2',
   'local.Azulinho.azulinho-jenkins-reconfigure-jobs-using-job-dsl',
   'local.Azulinho.azulinho-jenkins-server',
+  'bennojoy.ntp',
   'Azulinho.azulinho-python27',
   'Azulinho.azulinho-ssh-keys',
 ]

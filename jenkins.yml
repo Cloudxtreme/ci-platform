@@ -8,6 +8,9 @@
     # configure /etc/resolv.conf
     - Azulinho.azulinho-google-dns
 
+    # configure ntp
+    - bennojoy.ntp
+
     # jenkins role installs jenkins
     - local.Azulinho.azulinho-jenkins-server
 
