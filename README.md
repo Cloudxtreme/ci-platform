@@ -7,6 +7,8 @@ To use it:
 2. clone the secrets repository:
     - git clone <secrets-repo> secrets
 3. ln -s group_vars secrets/ci-platform
+4. install ansible:
+    - pip2 install ansible==1.6.2
 
 Note: the ansible 'vault' file is not currently used, as soon it is required, it should be moved to the secrets-repo and symlinked.
 
