@@ -9,5 +9,6 @@ galaxy_info:
   categories:
     - packaging
 dependencies:
+  - Azulinho.azulinho-python27
   - local.Azulinho.azulinho-jenkins-server
 
