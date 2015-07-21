@@ -20,7 +20,7 @@
     - jenkins_job_dsl
 
 - name: delete old seed files from the seed directory
-  command: rm -f /etc/jenkins_seed_jobs/*
+  command: rm -f /etc/jenkins_seed_jobs/seeds/*
   tags:
     - jenkins_job_dsl
 
