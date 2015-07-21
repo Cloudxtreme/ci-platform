@@ -19,6 +19,11 @@
   tags:
     - jenkins_job_dsl
 
+- name: delete old seed files from the seed directory
+  command: rm -f /etc/jenkins_seed_jobs/*
+  tags:
+    - jenkins_job_dsl
+
 # we keep the XML seed job definitions in :
 # <role>/files/seed_jobs_definitions/*.xml
 #
