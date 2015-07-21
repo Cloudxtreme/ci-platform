@@ -4,7 +4,7 @@
 - name: Get Jenkins updates
   sudo: yes
   get_url: url=http://updates.jenkins-ci.org/update-center.json
-    dest={{azulinho_jenkins_plugins['updates_dest']}}
+    dest={{ azulinho_jenkins_plugins['updates_dest'] }}
     thirsty=yes
     mode=0440
   register: _jenkins_updates
@@ -30,29 +30,33 @@
   tags: ['jenkins', 'jenkins_plugins']
 
 - name: download and install plugins
-  command: wget -c http://mirrors.jenkins-ci.org/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.hpi
-    chdir={{ azulinho_jenkins_plugins['plugins_dir'] }}
+  get_url: url=http://mirrors.jenkins-ci.org/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.hpi
+    dest={{ azulinho_jenkins_plugins['plugins_dir'] }}
   with_items: azulinho_jenkins_plugins['plugins']
+  register: _jenkins_official_plugins
   tags: ['jenkins', 'jenkins_plugins']
 
     # Some plugins are not available on the jenkins website
 - name: download and install plugins (non-published)
-  command: wget -c {{ item }}
-    chdir={{ azulinho_jenkins_plugins['plugins_dir'] }}
+  get_url: url={{ item }}
+    dest={{ azulinho_jenkins_plugins['plugins_dir'] }}
   with_items: azulinho_jenkins_plugins['non_published_plugins']
-  tags: ['jenkins', 'jenkins_plugins']
+  register: _jenkins_unofficial_plugins
+  tags: ['jenkins', 'jenkins_plugins', 'jenkins_nonpublished_plugins']
 
 - name: update plugin file ownership to jenkins
   file: path={{ item }}
     owner=jenkins
     group=jenkins
   with_fileglob: "{{ azulinho_jenkins_plugins['plugins_dir'] }}"
-  tags: ['jenkins', 'jenkins_plugins']
+  tags: ['jenkins', 'jenkins_plugins', 'jenkins_nonpublished_plugins']
 
 - name: safe-restart jenkins
   command: java -jar {{ azulinho_jenkins_plugins['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_plugins['port'] }} safe-restart
-  tags: ['jenkins', 'jenkins_plugins']
+  when: _jenkins_unofficial_plugins.changed or _jenkins_official_plugins.changed
+  tags: ['jenkins', 'jenkins_plugins', 'jenkins_nonpublished_plugins']
 
 - name: wait for jenkins to restart, it can take forever
   command: sleep 180
-  tags: ['jenkins', 'jenkins_plugins']
+  tags: ['jenkins', 'jenkins_plugins', 'jenkins_nonpublished_plugins']
+  when: _jenkins_unofficial_plugins.changed or _jenkins_official_plugins.changed
