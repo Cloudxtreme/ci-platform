@@ -7,6 +7,12 @@
   tags:
     - jenkins_job_dsl
 
+- name: delete old seed files from the seed directory
+  command: rm -rf /etc/jenkins_seed_jobs/
+  sudo: true
+  tags:
+    - jenkins_job_dsl
+
 # /etc/jenkins_seed_jobs contains the XML based job definitions for the
 # jenkins seed jobs that will execute the DSL groovy code
 #
@@ -16,11 +22,6 @@
     - /etc/jenkins_seed_jobs
     - /etc/jenkins_seed_jobs/seeds
     - /etc/jenkins_seed_jobs/dsl
-  tags:
-    - jenkins_job_dsl
-
-- name: delete old seed files from the seed directory
-  command: rm -f /etc/jenkins_seed_jobs/seeds/*
   tags:
     - jenkins_job_dsl
 
