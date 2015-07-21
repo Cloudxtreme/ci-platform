@@ -8,8 +8,9 @@
     # configure /etc/resolv.conf
     - Azulinho.azulinho-google-dns
 
+    # TODO: this is breaking our run
     # configure ntp
-    - bennojoy.ntp
+    # - bennojoy.ntp
 
     # jenkins role installs jenkins
     - local.Azulinho.azulinho-jenkins-server
