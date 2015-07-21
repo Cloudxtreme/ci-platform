@@ -4,21 +4,32 @@ It is a subset of the existing Ansible code from [ansible-jenkins-showcase](http
 To use it:
 
 1. clone this repostory
+
+        git clone http://github.com/clusterhq/ci-platform.git
+        cd ci-platform
+
 2. clone the secrets repository:
-    - git clone <secrets-repo> secrets
-3. ln -s secrets/ci-platform group_vars
+
+        git clone http://github.com/clusterhq/segredos.git
+
+3. Symlink the secrets to group_vars
+
+        ln -s segredos/ci-platform group_vars
+
 4. install ansible:
-    - pip2 install ansible==1.9.2
+
+        pip2 install ansible==1.9.2
+
 
 Note: the ansible 'vault' file is not currently used, as soon it is required, it should be moved to the secrets-repo and symlinked.
 
 The secrets-repo above contains the YAML dictionary (group_vars/all.yaml) used by Ansible to configure the instance.
 
-Simply run:
+5. Then simply run:
 
     rake
 
-and then connect to [http://jenkins:8080](http://jenkins:8080)
+and connect to [http://jenkins:8080](http://jenkins:8080)
 
 you should see a fully deployed, configured jenkins ready to bootstrap EC2 slaves.
 
