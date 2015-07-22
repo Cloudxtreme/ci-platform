@@ -27,7 +27,7 @@ The secrets-repo above contains the YAML dictionary (group_vars/all.yaml) used b
 
 5. Then simply run:
 
-    rake
+        rake
 
 and connect to [http://jenkins:8080](http://jenkins:8080)
 
