@@ -42,7 +42,11 @@
           <type>{{ t.type | default('T2Micro')}}</type>
           <labels>{{ t.labels }}</labels>
           <mode>{{t.mode |default('NORMAL')}}</mode>
-          <initScript>{{t.initscript |default('')}}</initScript>
+          <initScript>
+{%                  for command in t.initscript %}
+{{ command }}
+{%                  endfor %}
+          </initScript>
           <tmpDir>{{t.tmpDir |default('') }}</tmpDir>
           <userData>{{ t.userData |default('') }}</userData>
           <numExecutors>{{ t.numExecutors |default('1') }}</numExecutors>

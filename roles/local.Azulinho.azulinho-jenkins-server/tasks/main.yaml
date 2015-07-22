@@ -70,26 +70,26 @@
 - name: Deploy main jenkins config.xml file
   template: dest=/var/lib/jenkins/config.xml
     src=config.xml.j2
-  tags: ['jenkins']
+  tags: ['jenkins', 'jenkins_config']
 
 - name: update jenkins main config.xml file
   file: path=/var/lib/jenkins/config.xml
         state=file
         owner=jenkins
         group=jenkins
-  tags: ['jenkins']
+  tags: ['jenkins', 'jenkins_config']
 
 - name: Deploy GlobalStats plugin config
   template: dest=/var/lib/jenkins/org.jenkinsci.plugins.statsd.StatsdConfig.xml
     src=org.jenkinsci.plugins.statsd.StatsdConfig.xml.j2
-  tags: ['jenkins']
+  tags: ['jenkins', 'jenkins_config']
 
 - name: update jenkins GlobalStats plugin config
   file: path=/var/lib/jenkins/org.jenkinsci.plugins.statsd.StatsdConfig.xml
         state=file
         owner=jenkins
         group=jenkins
-  tags: ['jenkins']
+  tags: ['jenkins', 'jenkins_config']
 
 
 # Start jenkins, we need it up and running before we are able to download
