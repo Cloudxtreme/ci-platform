@@ -48,6 +48,7 @@ My lxc conf looks like:
     lxc.autodev = true
 
 and my dnsmasq file:
+
     \>cat /etc/dnsmasq-lxcbr0.conf
     interface=lxcbr0
     except-interface=lo
