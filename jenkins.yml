@@ -12,6 +12,9 @@
     # configure ntp
     # - bennojoy.ntp
 
+    # install latest git
+    - Azulinho.azulinho-git
+
     # jenkins role installs jenkins
     - local.Azulinho.azulinho-jenkins-server
 
