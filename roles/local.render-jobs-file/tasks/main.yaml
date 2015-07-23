@@ -6,3 +6,10 @@
     owner=jenkins
     group=jenkins
   tags: ['jenkins_render.py']
+
+- name: install jinja2 and yaml
+  pip: name={{ item }} executable=/usr/local/bin/pip2.7
+  with_items:
+    - jinja2
+    - pyyaml
+  tags: ['jenkins_render.py']
