@@ -12,7 +12,6 @@ vagrant_plugins = { 'ansible' => '0.2.0' ,
 # any local. roles are stored locally with the repository
 ansible_roles = [
   'Azulinho.azulinho-google-dns',
-  'Azulinho.azulinho-git',
   'local.Azulinho.azulinho-jenkins-plugins',
   'Azulinho.azulinho-yum-repo-epel',
   'Azulinho.azulinho-java-openjdk-jdk',

@@ -13,7 +13,7 @@
     # - bennojoy.ntp
 
     # install latest git
-    - Azulinho.azulinho-git
+    - local.latest-git
 
     # jenkins role installs jenkins
     - local.Azulinho.azulinho-jenkins-server
