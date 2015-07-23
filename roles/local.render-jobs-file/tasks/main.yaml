@@ -1,0 +1,8 @@
+---
+
+- name: copy render.py
+  copy: dest=/usr/local/bin/render.py
+    src=render.py
+    owner=jenkins
+    group=jenkins
+  tags: ['jenkins_render.py']

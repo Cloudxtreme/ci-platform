@@ -24,3 +24,5 @@
     # deploy jobs using the groovy DSL
     - local.Azulinho.azulinho-jenkins-reconfigure-jobs-using-job-dsl
 
+    # deploy render.py file
+    - local.render-jobs-file
