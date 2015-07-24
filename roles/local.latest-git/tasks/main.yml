@@ -22,7 +22,7 @@
     creates={{ workspace }}/git-{{ git_version }}/README
 
 - name: Check if git is installed.
-  command: which git
+  command: /usr/local/bin/git --version
   changed_when: false
   failed_when: false
   register: git_installed
