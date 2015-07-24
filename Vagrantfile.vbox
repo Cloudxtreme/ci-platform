@@ -49,6 +49,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vbguest.auto_update = false
   end
 
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.http     = "http://192.168.67.1:8123/"
+    config.proxy.no_proxy = "localhost,127.0.0.1,.example.com,jenkins"
+  end
+
+
   # boot up virtualbox instances on network 192.168.67.x
   boxes.each do |opts|
     config.vm.define opts[:name] do |machine|
@@ -79,7 +85,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
 
 
-        #ansible.verbose = 'vvv'
+        # ansible.verbose = 'vvv'
         ansible.sudo = true
         ansible.playbook = "vagrant-#{opts[:book]}.yml"
         ansible.inventory_path= 'vagrant'
