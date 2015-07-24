@@ -5,7 +5,6 @@ vagrant_plugins = { 'ansible' => '0.2.0' ,
                     'vagrant-cachier' => '1.1.0',
                     'vagrant-lxc' => '1.0.1',
                     'vagrant-aws' => '0.6.0',
-                    'vagrant-proxyconf' => '1.5.0',
                     'vagrant-linode' => '0.2.0',
                     'vagrant-hostsupdater' => '0.0.11'}
 
