@@ -64,7 +64,7 @@ end
 # Vagrantfiles, one for each provider and symlinking them just-in-time
 desc "power up the vagrant boxes"
 task :vagrant_up do
-  ['polipo', 'jenkins'].each do |box|
+  ['jenkins'].each do |box|
     if File.exists?("Vagrantfile")
       File.unlink("Vagrantfile")
     end
@@ -91,7 +91,6 @@ task :vagrant_up do
       end
     end
   end
-  system("vagrant provision polipo")
   system("vagrant provision jenkins")
 end
 

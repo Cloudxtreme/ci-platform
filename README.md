@@ -34,10 +34,6 @@ and connect to [http://jenkins:8080](http://jenkins:8080)
 you should see a fully deployed, configured jenkins ready to bootstrap EC2 slaves.
 
 
-The upstream mirrors for Jenkins are not very fast, and tend to timeout quite often,
-we try to reduce that issue a bit by deploying a local caching proxy polipo VM which jenkins will consume.
-
-
 Some limited support available for linode, LXC and AWS, simply use:
 
     rake default [linode|lxc|aws]

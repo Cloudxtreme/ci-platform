@@ -5,9 +5,5 @@
 [jenkins_servers]
 jenkins group=jenkins_servers deploy_env=vagrant
 
-[polipo_servers]
-polipo group=polipo_servers deploy_env=vagrant
-
 [vagrant:children]
 jenkins_servers
-polipo_servers
