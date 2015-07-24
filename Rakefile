@@ -5,6 +5,7 @@ vagrant_plugins = { 'ansible' => '0.2.0' ,
                     'vagrant-cachier' => '1.1.0',
                     'vagrant-lxc' => '1.0.1',
                     'vagrant-aws' => '0.6.0',
+                    'vagrant-proxyconf' => '1.5.0',
                     'vagrant-linode' => '0.2.0',
                     'vagrant-hostsupdater' => '0.0.11'}
 
@@ -63,7 +64,7 @@ end
 # Vagrantfiles, one for each provider and symlinking them just-in-time
 desc "power up the vagrant boxes"
 task :vagrant_up do
-  ['jenkins'].each do |box|
+  ['polipo', 'jenkins'].each do |box|
     if File.exists?("Vagrantfile")
       File.unlink("Vagrantfile")
     end
@@ -90,6 +91,7 @@ task :vagrant_up do
       end
     end
   end
+  system("vagrant provision polipo")
   system("vagrant provision jenkins")
 end
 

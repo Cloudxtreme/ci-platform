@@ -9,6 +9,12 @@ box_url = 'https://github.com/2creatives/vagrant-centos/releases/download/v6.5.3
 
 boxes = [
   {
+    :name => :polipo,
+    :ram => 512,
+    :book => 'polipo',
+    :ip => "254"
+  },
+  {
     :name => :jenkins,
     :ram => 1512,
     :book => 'jenkins',
@@ -50,7 +56,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   if Vagrant.has_plugin?("vagrant-proxyconf")
-    config.proxy.http     = "http://192.168.67.1:8123/"
+    config.proxy.http     = "http://192.168.67.254:8123/"
     config.proxy.no_proxy = "localhost,127.0.0.1,.example.com,jenkins"
   end
 
