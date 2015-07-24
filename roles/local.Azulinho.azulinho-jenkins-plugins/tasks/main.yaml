@@ -30,7 +30,7 @@
   tags: ['jenkins', 'jenkins_plugins']
 
 - name: download and install plugins
-  get_url: url=http://mirrors.jenkins-ci.org/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.hpi
+  get_url: url=http://ftp.nluug.nl/programming/jenkins/plugins/{{ item.name }}/{{ item.version }}/{{ item.name }}.hpi
     dest={{ azulinho_jenkins_plugins['plugins_dir'] }}
   with_items: azulinho_jenkins_plugins['plugins']
   register: _jenkins_official_plugins
