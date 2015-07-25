@@ -8,6 +8,9 @@
     # configure /etc/resolv.conf
     - Azulinho.azulinho-google-dns
 
+    # Install OS updates
+    - local.updates
+
     # TODO: this is breaking our run
     # configure ntp
     # - bennojoy.ntp

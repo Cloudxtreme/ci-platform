@@ -1,0 +1,6 @@
+---
+
+- name: install OS updates
+  yum: name=*
+    state=latest
+  tags: ['updates']
