@@ -5,6 +5,9 @@
   sudo: true
 
   roles:
+    # disable selinux, required on aws
+    - local.disable_selinux
+
     # configure /etc/resolv.conf
     - Azulinho.azulinho-google-dns
 
@@ -27,8 +30,9 @@
     # deploy SSH keys
     - Azulinho.azulinho-ssh-keys
 
+    # deploy render.py file
+    - local.render-jobs-file
+
     # deploy jobs using the groovy DSL
     - local.Azulinho.azulinho-jenkins-reconfigure-jobs-using-job-dsl
 
-    # deploy render.py file
-    - local.render-jobs-file
