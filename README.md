@@ -29,6 +29,8 @@ The secrets-repo above contains the YAML dictionary (group_vars/all.yaml) used b
 
         rake
 
+    The first run, takes around 40 minutes, following runs around 9 minutes
+
 and connect to [http://jenkins:8080](http://jenkins:8080)
 
 you should see a fully deployed, configured jenkins ready to bootstrap EC2 slaves.
