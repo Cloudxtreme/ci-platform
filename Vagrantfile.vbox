@@ -37,6 +37,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # This is likely to fail, as the guest utilities won't match the host vbox v.
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
+  config.vm.provision "shell",
+    inline: "yum install -y libselinux-python"
+
   # Cache yum packages locally with vagrant-cachier
   if Vagrant.has_plugin?("vagrant-cachier")
       # Configure cached packages to be shared between instances of the same base box.
