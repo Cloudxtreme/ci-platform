@@ -66,6 +66,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vm.provision "shell",
         inline: "yum install -y libselinux-python"
 
+      config.vm.provision "shell",
+        inline: "sed -i s/^Defaults.*requiretty/#Defaultrequiretty/ /etc/sudoers"
+
       config.vm.provision :ansible do |ansible|
         if defined? ENV['TAGS']
           ansible.tags = ENV['TAGS']
