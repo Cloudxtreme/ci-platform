@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+{% set cfg=azulinho_jenkins_server %}
+<org.jenkinsci.plugins.slave__setup.SetupConfig plugin="slave-setup@1.9">
+  <setupConfigItems>
+    <org.jenkinsci.plugins.slave__setup.SetupConfigItem>
+      <preLaunchScript></preLaunchScript>
+      <prepareScript></prepareScript>
+      <filesDir>{{ cfg.slave_setup.dir }}</filesDir>
+      <commandLine></commandLine>
+      <deployNow>true</deployNow>
+      <assignedLabelString></assignedLabelString>
+      <prepareScriptExecuted>true</prepareScriptExecuted>
+    </org.jenkinsci.plugins.slave__setup.SetupConfigItem>
+  </setupConfigItems>
+</org.jenkinsci.plugins.slave__setup.SetupConfig>

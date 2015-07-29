@@ -127,6 +127,26 @@
   notify:
     - safe-restart jenkins
 
+# Configure files to be deployed to the slaves
+- name: Create /etc/slave_config
+  file: path=/etc/slave_config
+    owner=jenkins
+    group=jenkins
+    mode=0700
+    state=directory
+  tags: ['jenkins']
+
+- name: Copy contents of acceptance.yaml to config dir
+  copy: content="{{ acceptance.config }}"
+    dest=/etc/slave_config/acceptance.yaml
+  tags: ['jenkins']
+
+- name: Deploy jenkins slave-setup config
+  template: dest=/var/lib/jenkins/org.jenkinsci.plugins.slave_setup.SetupConfig.xml
+    src=org.jenkinsci.plugins.slave_setup.SetupConfig.xml.j2
+  tags: ['jenkins', 'jenkins_config']
+  notify:
+    - safe-restart jenkins
 
 # Start jenkins, we need it up and running before we are able to download
 # the CLI tool
