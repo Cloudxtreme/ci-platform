@@ -42,8 +42,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-        <command>. /etc/profile.d/github.sh
-            /usr/local/bin/python2.7 /usr/local/bin/render.py</command>
+      <command>/usr/local/bin/python2.7 /usr/local/bin/render.py</command>
     </hudson.tasks.Shell>
     <javaposse.jobdsl.plugin.ExecuteDslScripts plugin="job-dsl@1.35">
       <targets>**/*.groovy</targets>
