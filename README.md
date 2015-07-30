@@ -68,7 +68,13 @@ for linode, you need to export your linode key:
 
 for aws, you need to export your aws environment variables.
 
-export AWS_ACCESS_KEY_ID
-export AWS_SECRET_KEY
-export AWS_KEYPAIR_NAME
-export AWS_KEYPAIR_FILEPATH
+    export AWS_ACCESS_KEY_ID
+    export AWS_SECRET_KEY
+    export AWS_KEYPAIR_NAME
+    export AWS_KEYPAIR_FILEPATH
+
+Note:
+
+When powering up, vagrant will ask for the password to login to the server
+just hit ENTER three times
+vagrant will continue after that
