@@ -134,12 +134,17 @@
     group=jenkins
     mode=0700
     state=directory
-  tags: ['jenkins']
+  tags: ['jenkins', 'jenkins_config']
 
-- name: Copy contents of acceptance.yaml to config dir
+- name: Copy config contents of acceptance.yaml to config dir
   copy: content="{{ acceptance.config }}"
     dest=/etc/slave_config/acceptance.yaml
-  tags: ['jenkins']
+  tags: ['jenkins', 'jenkins_config']
+
+- name: Copy ssh key contents of acceptance.yaml to slave dir
+  copy: content="{{ acceptance['ssh-key'] }}"
+    dest=/etc/slave_config/id_rsa
+  tags: ['jenkins', 'jenkins_config']
 
 - name: Deploy jenkins slave-setup config
   template: dest=/var/lib/jenkins/org.jenkinsci.plugins.slave_setup.SetupConfig.xml
