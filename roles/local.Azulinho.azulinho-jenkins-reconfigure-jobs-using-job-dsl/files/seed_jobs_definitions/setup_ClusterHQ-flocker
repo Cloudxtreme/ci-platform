@@ -7,6 +7,15 @@
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.10">
       <projectUrl>https://github.com/ClusterHQ/flocker.git/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>RECONFIGURE_BRANCH</name>
+          <description>The branch for which jobs will be created or updated</description>
+          <defaultValue>master</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.22">
       <autoRebuild>false</autoRebuild>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -48,7 +57,7 @@
       <targets>**/*.groovy</targets>
       <usingScriptText>false</usingScriptText>
       <ignoreExisting>false</ignoreExisting>
-      <removedJobAction>DELETE</removedJobAction>
+      <removedJobAction>IGNORE</removedJobAction>
       <removedViewAction>IGNORE</removedViewAction>
       <lookupStrategy>JENKINS_ROOT</lookupStrategy>
       <additionalClasspath></additionalClasspath>
