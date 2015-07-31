@@ -33,6 +33,9 @@
     # deploy render.py file
     - local.render-jobs-file
 
+    # deploy jenkins-to-graphite.py script
+    - local.jenkins-to-graphite
+
     # deploy jobs using the groovy DSL
     - local.Azulinho.azulinho-jenkins-reconfigure-jobs-using-job-dsl
 

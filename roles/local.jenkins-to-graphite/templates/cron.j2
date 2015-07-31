@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/usr/local/bin/python2.7 /usr/local/bin/jenkins-to-graphite.py --graphite-server {{ jenkins_to_graphite['statsd']['host'] }} --graphite-port {{ jenkins_to_graphite['statsd']['graphite_port'] }}  --jenkins-url http://127.0.0.1:{{ jenkins_to_graphite['port'] }}  {% if jenkins_to_graphite['user'] %} --jenkins-user {{ jenkins_to_graphite['user'] }} --jenkins-password {{ jenkins_to_graphite['password'] }} {% endif %} --jobs {{ jenkins_to_graphite['statsd']['graphite_view'] }} --prefix {{ jenkins_to_graphite['statsd']['prefix'] }}
