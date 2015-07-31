@@ -160,6 +160,16 @@
   notify:
     - safe-restart jenkins
 
+- name: increase jenkins JVM heap-size
+  lineinfile:
+    dest=/etc/sysconfig/jenkins
+    line='JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Xmx3096m"'
+    state=present
+  tags: ['jenkins', 'jenkins_config', 'jenkins_jvm']
+  notify:
+  notify:
+    - safe-restart jenkins
+
 # Start jenkins, we need it up and running before we are able to download
 # the CLI tool
 - name: Ensure jenkins is running
