@@ -146,6 +146,11 @@
     dest=/etc/slave_config/id_rsa
   tags: ['jenkins', 'jenkins_config']
 
+- name: add devpi caching server to the environment
+  copy: content="export PIP_INDEX_URL=http://{{devpi['host']}}:{{devpi['port']}}/root/pypi/+simple/; export TRUSTED_HOST={{devpi['host']}}"
+    dest=/etc/slave_config/pip.sh
+  tags: ['jenkins', 'jenkins_config']
+
 - name: Deploy jenkins slave-setup config
   template: dest=/var/lib/jenkins/org.jenkinsci.plugins.slave_setup.SetupConfig.xml
     src=org.jenkinsci.plugins.slave_setup.SetupConfig.xml.j2
