@@ -16,3 +16,4 @@ group_vars
 secrets
 segredos
 roles/bennojoy.ntp
+roles/franklinkim.cron/
