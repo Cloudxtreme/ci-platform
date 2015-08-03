@@ -6,15 +6,15 @@
     dest=/usr/local/bin/jenkins-to-graphite.py
   tags: ['statsd']
 
-- name: set right perms
-  file: path=/usr/local/bin/cron
-   mode=0755
-  tags: ['statsd']
-
 - name: copy cron job script
   template:
     src=cron.j2
     dest=/usr/local/bin/cron
+  tags: ['statsd']
+
+- name: set right perms
+  file: path=/usr/local/bin/cron
+   mode=0755
   tags: ['statsd']
 
 - name: configure cron for jenkins-to-graphite
