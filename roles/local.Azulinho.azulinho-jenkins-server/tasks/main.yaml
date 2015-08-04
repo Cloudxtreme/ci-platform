@@ -161,6 +161,11 @@
     src=docker.ubuntu14.j2
   tags: ['jenkins', 'jenkins_config']
 
+- name: create dockerhub creds file in /etc/slave_config
+  copy: dest=/etc/slave_config/dockerhub_creds
+    content="{{ credentials['dockerhub']['user']}}:{{ credentials['dockerhub']['password']}}:{{credentials['dockerhub']['email']}}"
+  tags: ['jenkins', 'jenkins_config']
+
 - name: Deploy jenkins slave-setup config
   template: dest=/var/lib/jenkins/org.jenkinsci.plugins.slave_setup.SetupConfig.xml
     src=org.jenkinsci.plugins.slave_setup.SetupConfig.xml.j2
