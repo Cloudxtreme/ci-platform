@@ -156,7 +156,7 @@
     src=docker.centos7.j2
   tags: ['jenkins', 'jenkins_config']
 
-- name: copy /etc/sysconfig/docker for ubuntu 14 to /etc/slave_config
+- name: copy /etc/default/docker for ubuntu 14 to /etc/slave_config
   template: dest=/etc/slave_config/docker.ubuntu14
     src=docker.ubuntu14.j2
   tags: ['jenkins', 'jenkins_config']
@@ -169,6 +169,13 @@
 - name: Deploy jenkins slave-setup config
   template: dest=/var/lib/jenkins/org.jenkinsci.plugins.slave_setup.SetupConfig.xml
     src=org.jenkinsci.plugins.slave_setup.SetupConfig.xml.j2
+  tags: ['jenkins', 'jenkins_config']
+  notify:
+    - safe-restart jenkins
+
+- name: Deploy jenkins slave init script
+  template: dest=/etc/slave_config/CommandLineScript.sh
+    src=CommandLineScript.sh.j2
   tags: ['jenkins', 'jenkins_config']
   notify:
     - safe-restart jenkins

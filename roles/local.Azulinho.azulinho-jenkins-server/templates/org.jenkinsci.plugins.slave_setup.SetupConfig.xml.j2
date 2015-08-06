@@ -3,13 +3,13 @@
 <org.jenkinsci.plugins.slave__setup.SetupConfig plugin="slave-setup@1.9">
   <setupConfigItems>
     <org.jenkinsci.plugins.slave__setup.SetupConfigItem>
-      <preLaunchScript></preLaunchScript>
-      <prepareScript></prepareScript>
-      <filesDir>{{ cfg.slave_setup.dir }}</filesDir>
-      <commandLine></commandLine>
-      <deployNow>true</deployNow>
-      <assignedLabelString></assignedLabelString>
-      <prepareScriptExecuted>true</prepareScriptExecuted>
+      <preLaunchScript>{{ cfg.slave_setup.preLaunchScript }}</preLaunchScript>
+      <prepareScript>{{ cfg.slave_setup.prepareScript }}</prepareScript>
+      <filesDir>{{ cfg.slave_setup.filesDir }}</filesDir>
+      <commandLine>{{cfg.slave_setup.commandLine }}</commandLine>
+      <deployNow>{{ cfg.slave_setup.deployNow }}</deployNow>
+      <assignedLabelString>{{ cfg.slave_setup.assignedLabelString }}</assignedLabelString>
+      <prepareScriptExecuted>{{ cfg.slave_setup.prepareScriptExecuted }}</prepareScriptExecuted>
     </org.jenkinsci.plugins.slave__setup.SetupConfigItem>
   </setupConfigItems>
 </org.jenkinsci.plugins.slave__setup.SetupConfig>
