@@ -30,6 +30,7 @@
 #}
                 <labelString>{{ t.labelString }}</labelString>
                 <description>{{ t.description |default('')}}</description>
+                <locationId>{{ t.locationId |default('DFW')}}</locationId>
                 <initScript>{{ t.initScript | default('') | join('\n') }}</initScript>
                 <userData>{{ t.userData | default('') | join('\n') }}</userData>
                 <numExecutors>{{ t.numExecutors |default('1')}}</numExecutors>
