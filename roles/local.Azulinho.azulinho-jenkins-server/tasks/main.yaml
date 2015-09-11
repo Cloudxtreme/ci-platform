@@ -247,6 +247,8 @@
 - name: Deploy groovy script file for retrieving cloudbees password
   template: dest={{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
     src=cloudbees.groovy.j2
+    owner=jenkins
+    group=jenkins
   tags: ['jenkins', 'jenkins_config', 'cloudbees']
   notify:
     - safe-restart jenkins
@@ -261,6 +263,8 @@
 - name: Deploy Credentials File
   template: dest={{ azulinho_jenkins_server['lib'] }}/credentials.xml
     src=credentials.xml.j2
+    owner=jenkins
+    group=jenkins
   tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'cloudbees']
   notify:
     - safe-restart jenkins
