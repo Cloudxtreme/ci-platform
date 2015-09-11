@@ -1,0 +1,6 @@
+import hudson.util.Secret
+
+{% set cfg=azulinho_jenkins_server %}
+{% set cloudbees_password=cfg['clouds']['cloudbees_cloud_connector_plugin']['password'] %}
+def secret = Secret.fromString('{{ cloudbees_password }}')
+println(secret.getEncryptedValue())
