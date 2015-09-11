@@ -187,6 +187,13 @@
   notify:
     - safe-restart jenkins
 
+- name: Deploy nodeMonitors file
+  template: dest=/var/lib/jenkins/nodeMonitors.xml
+    src=nodeMonitors.xml.j2
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files']
+  notify:
+    - safe-restart jenkins
+
 - name: increase jenkins JVM heap-size
   lineinfile:
     dest=/etc/sysconfig/jenkins
