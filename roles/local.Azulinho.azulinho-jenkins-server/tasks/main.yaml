@@ -236,3 +236,33 @@
   sudo: yes
   tags: ['jenkins', 'jenkinscli']
 
+# Lets deploy the Credentials file,
+# Jenkins encrypts the passwords locally on the server based on a couple of
+# local files, this needs we can't store an encrypted password in our secrets.
+# We can however use a jenkins Java library to retrieve the encrypted hash
+# that we need to insert into our credentials.xml file.
+# Jenkins needs to be running as we need to retrieve the encrypted
+# password from jenkins using a groovy script
+#
+- name: Deploy groovy script file for retrieving cloudbees password
+  template: dest={{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
+    src=cloudbees.groovy.j2
+  tags: ['jenkins', 'jenkins_config', 'cloudbees']
+  notify:
+    - safe-restart jenkins
+
+- name: Retrieve the CloudBees password from Jenkins
+  shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }}/ groovy {{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
+  tags: ['jenkins', 'jenkins_config', 'cloudbees']
+  register: cloudbees_encrypted_password
+  notify:
+    - safe-restart jenkins
+
+- name: Deploy Credentials File
+  template: dest={{ azulinho_jenkins_server['lib'] }}/credentials.xml
+    src=credentials.xml.j2
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'cloudbees']
+  notify:
+    - safe-restart jenkins
+
+
