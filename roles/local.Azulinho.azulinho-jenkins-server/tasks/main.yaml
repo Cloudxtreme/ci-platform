@@ -260,6 +260,13 @@
   notify:
     - safe-restart jenkins
 
+- name: Remove the cloubees groovy file
+  file: path={{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
+    state=absent
+  tags: ['jenkins', 'jenkins_config', 'cloudbees']
+  notify:
+    - safe-restart jenkins
+
 - name: Deploy Credentials File
   template: dest={{ azulinho_jenkins_server['lib'] }}/credentials.xml
     src=credentials.xml.j2
@@ -269,4 +276,24 @@
   notify:
     - safe-restart jenkins
 
+# Deploy the CloudBees Slave Configuration templates
+# we use these to specify which size our slaves should be
+- name: Create cloudbees CloudSlaveTemplates dir
+  file: dest={{ azulinho_jenkins_server['lib'] }}/cloudSlaveTemplates/{{item['label']}}
+    state=directory
+    owner=jenkins
+    group=jenkins
+  with_items: azulinho_jenkins_server['clouds']['cloudbees_cloud_connector_plugin']['templates']
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'cloudbees']
+  notify:
+    - safe-restart jenkins
 
+- name: Deploy CloudBees Slave Template configs
+  template: dest={{ azulinho_jenkins_server['lib'] }}/cloudSlaveTemplates/{{ item.label }}/config.xml
+    src=cloudSlaveTemplates.j2
+    owner=jenkins
+    group=jenkins
+  with_items: azulinho_jenkins_server['clouds']['cloudbees_cloud_connector_plugin']['templates']
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'cloudbees']
+  notify:
+    - safe-restart jenkins
