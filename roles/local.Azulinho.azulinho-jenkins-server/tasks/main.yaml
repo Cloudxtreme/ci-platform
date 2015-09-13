@@ -236,6 +236,10 @@
   sudo: yes
   tags: ['jenkins', 'jenkinscli']
 
+# Login usin the CLI
+- name: Login to Jenkins using CLI
+  shell: java -jar { azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }} login --username {{ azulinho_jenkins_server['user'] }} --password {{ azulinho_jenkins_server['password'] }}
+
 # Lets deploy the Credentials file,
 # Jenkins encrypts the passwords locally on the server based on a couple of
 # local files, this needs we can't store an encrypted password in our secrets.
@@ -244,6 +248,13 @@
 # Jenkins needs to be running as we need to retrieve the encrypted
 # password from jenkins using a groovy script
 #
+- name: Deploy groovy script file for retrieving jenkins encrypted strings
+  template: dest={{ azulinho_jenkins_server['lib'] }}/ReturnJenkinsEncryptedString.groovy
+    src=ReturnJenkinsEncryptedString.groovy
+    owner=jenkins
+    group=jenkins
+  tags: ['jenkins', 'jenkins_config', 'jenkins_users']
+
 - name: Deploy groovy script file for retrieving cloudbees password
   template: dest={{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
     src=cloudbees.groovy.j2
@@ -295,5 +306,34 @@
     group=jenkins
   with_items: azulinho_jenkins_server['clouds']['cloudbees_cloud_connector_plugin']['templates']
   tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'cloudbees']
+  notify:
+    - safe-restart jenkins
+
+# Deploy the jenkins users
+- name: Create jenkins users directories
+  file: dest={{ azulinho_jenkins_server['lib'] }}/users/{{item['username']}}
+    state=directory
+    owner=jenkins
+    group=jenkins
+  with_items: azulinho_jenkins_server['users']
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'jenkins_users']
+
+# This is reallly really ugly, we need a lookup plugin
+- name: Expand the users with encrypted password and API token
+  shell: "echo {{item['username']}} $(java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }}/ groovy {{ azulinho_jenkins_server['lib'] }}/ReturnJenkinsEncryptedString.groovy {{ item['apiToken'] }} )"
+  tags: ['jenkins', 'jenkins_config', 'cloudbees']
+  with_items: azulinho_jenkins_server['users']
+  register: expanded_jenkins_users_passwords_api_token
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'jenkins_users']
+  notify:
+    - safe-restart jenkins
+
+- name: Deploy the jenkins users config files
+  template: dest={{ azulinho_jenkins_server['lib'] }}/users/{{ item['username'] }}/config.xml
+    src=do_jenkinsUser.xml.j2
+    owner=jenkins
+    group=jenkins
+  with_items: azulinho_jenkins_server['users']
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'jenkins_users']
   notify:
     - safe-restart jenkins

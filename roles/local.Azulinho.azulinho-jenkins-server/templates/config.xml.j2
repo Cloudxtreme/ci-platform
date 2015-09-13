@@ -1,17 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
-{% from 'do_jclouds_plugin.xml.j2' import do_jclouds_plugin with context -%}
-{% from 'do_ec2_plugin.xml.j2' import do_ec2_plugin with context -%}
-{% from 'do_pipeline.xml.j2' import do_pipeline with context -%}
-{% from 'do_list_view.xml.j2' import do_list_view with context -%}
+{% from 'do_jclouds_plugin.xml.j2' import do_jclouds_plugin with context    -%}
+{% from 'do_ec2_plugin.xml.j2' import do_ec2_plugin with context            -%}
+{% from 'do_pipeline.xml.j2' import do_pipeline with context                -%}
+{% from 'do_list_view.xml.j2' import do_list_view with context              -%}
+{% from 'do_authorizationStrategy.xml.j2' import do_authorizationStrategy with context -%}
+{% from 'do_securityRealm.xml.j2' import do_securityRealm with context      -%}
 <hudson>
-{% set cfg=azulinho_jenkins_server %}
+{% set cfg=azulinho_jenkins_server                                           %}
   <disabledAdministrativeMonitors/>
   <version>1.609</version>
   <numExecutors>{{ cfg['numExecutors'] | default(2) }}</numExecutors>
   <mode>{{ cfg['mode'] | default('NORMAL') }}</mode>
   <useSecurity>{{ cfg['useSecurity'] | default('true') }}</useSecurity>
+{%  if cfg.authorizationStrategy is defined                                  %}
+{{  do_authorizationStrategy(cfg['authorizationStrategy']) }}
+{%  else                                                                     %}
   <authorizationStrategy class="hudson.security.AuthorizationStrategy$Unsecured"/>
+{%  endif                                                                    %}
+{%  if cfg.securityRealm is defined                                          %}
+{{  do_securityRealm(cfg['securityRealm']) }}
+{%  else                                                                     %}
   <securityRealm class="hudson.security.SecurityRealm$None"/>
+{%  endif                                                                    %}
   <disableRememberMe>{{ cfg['disableRememberMe'] | default('false') }}</disableRememberMe>
   <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
   <workspaceDir>{{ cfg['workspaceDir'] | default('${ITEM_ROOTDIR}/workspace') }}</workspaceDir>
@@ -20,7 +30,7 @@
   <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
   <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
   <clouds>
-{%  if cfg.clouds is defined %}
+{%  if cfg.clouds is defined                                                 %}
 
 {#   configuration for the ec2 plugin                                        #}
 
