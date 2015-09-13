@@ -48,7 +48,7 @@
 # and upload the DSL seeds into jenkins
 #
 - name: upload new job and ignore errors if it already exists
-  command: 'curl -X POST "http://localhost:8080/createItem?name={{item}}" --data-binary "@/etc/jenkins_seed_jobs/seeds/{{item}}" -H "Content-Type: text/xml"'
+  shell: curl -X POST "http://localhost:8080/createItem?name={{item}}" --user {{azulinho_jenkins_server['user']}}:{{azulinho_jenkins_server['password']}} --data-binary "@/etc/jenkins_seed_jobs/seeds/{{item}}" -H "Content-Type:text/xml"
   with_items:
     - "{{ _seed_dsl_jobs.stdout }}"
   tags:
@@ -57,7 +57,7 @@
 # and update the jobs if they already exist
 #
 - name: update jobs if they already exist
-  command: 'curl -X POST "http://localhost:8080/job/{{item}}/config.xml" --data-binary "@/etc/jenkins_seed_jobs/seeds/{{item}}" -H "Content-Type: text/xml"'
+  shell: curl -X POST "http://localhost:8080/job/{{item}}/config.xml" --user {{azulinho_jenkins_server['user']}}:{{azulinho_jenkins_server['password']}} --data-binary "@/etc/jenkins_seed_jobs/seeds/{{item}}" -H "Content-Type:text/xml"
   with_items:
     - "{{ _seed_dsl_jobs.stdout }}"
   tags:
@@ -96,17 +96,15 @@
   tags:
     - jenkins_job_dsl
 
-
 # finally we execute the seed jobs, they will run the groovy DSL code
 # and build the views, jobs, pipeline automatically
 #
 - name: kick builds of seed jobs
-  command: 'curl "http://localhost:8080/job/{{item}}/build"'
+  shell: curl -X POST "http://localhost:8080/job/{{item}}/buildWithParameters" --user {{azulinho_jenkins_server['user']}}:{{azulinho_jenkins_server['password']}} --data-binary "@/etc/jenkins_seed_jobs/seeds/{{item}}" -H "Content-Type:text/xml"
   with_items:
     - "{{ _seed_dsl_jobs.stdout }}"
   tags:
     - jenkins_job_dsl
-
 
 - name: we need to wait for the seed job to finish
   command: sleep 90
