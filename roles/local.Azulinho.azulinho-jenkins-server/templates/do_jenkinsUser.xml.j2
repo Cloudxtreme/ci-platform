@@ -1,11 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 {% macro getApiToken(username) -%}
+{#
+This is not working correctly.
+Getting the correct secrets used by Jenkins the way they are stored in the
+xml config files for the users is tricky.
+As we need to execute a groovy script through jenkins in order to retrieve
+the encrypted string to store in the jenkins xml file.
+It may be worth investigating how to update/create a user using groovy instead.
 {%  for line in expanded_jenkins_users_passwords_api_token['results'] -%}
 {%      if line['stdout'].split(' ')[0] == username -%}
 {{ line['stdout'].split(' ')[1] -}}
 {%      endif -%}
 {%  endfor -%}
+#}
+{{ "NOTIMPLEMENTEDYET" -}}
 {% endmacro -%}
 
 <user>
