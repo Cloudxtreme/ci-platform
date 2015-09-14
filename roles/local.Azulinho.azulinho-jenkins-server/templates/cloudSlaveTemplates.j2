@@ -2,7 +2,7 @@
 {% set cfg=azulinho_jenkins_server %}
 {% for item in cfg['clouds']['cloudbees_cloud_connector_plugin']['templates'] %}
 <com.cloudbees.jenkins.plugins.mtslavescloud.templates.BuiltinSlaveTemplate plugin="mansion-cloud@1.27">
-  <displayName>{{ item.label }}</displayName>
+  <displayName>{{ item.DisplayName }}</displayName>
   <disabled>{{ item.disabled }}</disabled>
   <account>{{ item.account }}</account>
   <defaultSize>{{ item.defaultSize |default('STANDARD') }}</defaultSize>
