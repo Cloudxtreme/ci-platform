@@ -2,9 +2,9 @@
   service: name=jenkins state=restarted
 
 - name: Reload jenkins configuration from disk
-  shell: su - jenkins -c "java -jar jenkins-cli.jar -s http://127.0.0.1:8080/jenkins/ -i ~/.ssh/id_rsa safe-restart"
+  shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }} safe-restart
 
 # Safe-restart Jenkins
 - name: safe-restart jenkins
   sudo: yes
-  command: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:8080 safe-restart
+  shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }} safe-restart
