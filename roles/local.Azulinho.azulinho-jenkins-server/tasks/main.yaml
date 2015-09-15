@@ -169,7 +169,7 @@
 - name: Deploy jenkins slave-setup config
   template: dest=/var/lib/jenkins/org.jenkinsci.plugins.slave_setup.SetupConfig.xml
     src=org.jenkinsci.plugins.slave_setup.SetupConfig.xml.j2
-  tags: ['jenkins', 'jenkins_config']
+  tags: ['jenkins', 'jenkins_config', 'jenkins_slave_setup']
   notify:
     - safe-restart jenkins
 
