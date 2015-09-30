@@ -24,6 +24,8 @@
     # jenkins role installs jenkins
     - local.Azulinho.azulinho-jenkins-server
 
+    - local.build-mesos-native-library
+
       # jenkins-plugins role installs the jenkins-plugins
     - local.Azulinho.azulinho-jenkins-plugins
 

@@ -1,0 +1,79 @@
+- name: install slc6-devtoolset repo
+  get_url:
+    dest=/etc/yum.repos.d/slc6-devtoolset.repo
+    url=http://linuxsoft.cern.ch/cern/devtoolset/slc6-devtoolset.repo
+  tags: mesos
+
+- name: import CERN GPG key
+  rpm_key: state=present
+    key=http://linuxsoft.cern.ch/cern/centos/7/os/x86_64/RPM-GPG-KEY-cern
+
+- name: install Apache Maven Repo
+  get_url:
+    dest=/etc/yum.repos.d/epel-apache-maven.repo
+    url=http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo
+  tags: mesos
+
+- name: add wandisco-svn.repo file
+  copy:
+    src=wandisco-svn.repo
+    dest=/etc/yum.repos.d/wandisco-svn.repo
+  tags: mesos
+
+- name: Install devtoolset-2-toolchain which includes GCC 4.8.2
+  yum:
+    name=devtoolset-2-toolchain
+    state=present
+  tags: mesos
+
+- name: install required packages for mesos
+  yum:
+    name={{ item }}
+    state=present
+  with_items:
+    - apache-maven
+    - python-devel
+    - java-1.7.0-openjdk-devel
+    - zlib-devel
+    - libcurl-devel
+    - openssl-devel
+    - cyrus-sasl-devel
+    - cyrus-sasl-md5
+    - apr-devel
+    - subversion-devel
+    - apr-util-devel
+  tags: mesos
+
+- name: download mesos source
+  get_url:
+    url=http://archive.apache.org/dist/mesos/0.21.1/mesos-0.21.1.tar.gz
+    dest=/var/lib/jenkins/mesos-0.21.1.tar.gz
+  tags: mesos
+
+- name: untar mesos source files
+  command: tar xzf /var/lib/jenkins/mesos-0.21.1.tar.gz
+  args:
+    chdir: /var/lib/jenkins/
+    creates: /var/lib/jenkins/mesos-0.21.1
+  tags: mesos
+
+- name: create build directory for mesos
+  file: path=/var/lib/jenkins/mesos-0.21.1/build
+    state=directory
+  tags: mesos
+
+- name: copy build.sh file
+  copy: dest=/var/lib/jenkins/mesos-0.21.1/build/build.sh
+    src=build.sh
+  tags: mesos
+
+- name: update permissions on build.sh
+  file: path=/var/lib/jenkins/mesos-0.21.1/build/build.sh
+    mode=0755
+  tags: mesos
+
+- name: build mesos using devtoolset-2
+  command: scl enable devtoolset-2 /var/lib/jenkins/mesos-0.21.1/build/build.sh
+  args:
+    chdir: /var/lib/jenkins/mesos-0.21.1/build
+  tags: mesos
