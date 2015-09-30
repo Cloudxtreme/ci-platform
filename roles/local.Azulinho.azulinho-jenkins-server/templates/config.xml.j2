@@ -5,6 +5,7 @@
 {% from 'do_list_view.xml.j2' import do_list_view with context              -%}
 {% from 'do_authorizationStrategy.xml.j2' import do_authorizationStrategy with context -%}
 {% from 'do_securityRealm.xml.j2' import do_securityRealm with context      -%}
+{% from 'do_mesos_cloud.j2' import do_mesos_cloud with context              -%}
 <hudson>
 {% set cfg=azulinho_jenkins_server                                           %}
   <disabledAdministrativeMonitors/>
@@ -44,6 +45,13 @@
 {%      if cfg.clouds.jclouds_plugin is defined %}
 {%          for item in cfg.clouds.jclouds_plugin %}
 {{              do_jclouds_plugin(item)                                      }}
+{%          endfor                                                           %}
+{%      endif  %}
+
+{#   configuration for the mesosClouds plugin                                #}
+{%      if cfg.clouds.MesosCloud_plugin is defined %}
+{%          for item in cfg.clouds.MesosCloud_plugin %}
+{{              do_mesos_cloud(item)                                      }}
 {%          endfor                                                           %}
 {%      endif  %}
 {%  endif  %}
