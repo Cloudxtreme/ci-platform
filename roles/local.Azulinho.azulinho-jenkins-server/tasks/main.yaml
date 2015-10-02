@@ -57,9 +57,15 @@
   sudo: yes
   tags: ['jenkins', 'firewall', 'jenkins_port']
 
-- name: add jenkins rule
+- name: add jenkins rule for jenkins port
   command: /sbin/iptables -I INPUT 1 -p tcp --dport {{ azulinho_jenkins_server['port'] }} -j ACCEPT -m comment --comment "Jenkins"
-  when: iptablesrules.stdout.find("Apache") == -1
+  when: iptablesrules.stdout.find("Jenkins") == -1
+  sudo: yes
+  tags: ['jenkins', 'firewall', 'jenkins_port']
+
+- name: add jenkins firewall rule for mesos slaves
+  command: /sbin/iptables -I INPUT 2 -p tcp --match multiport --dports 1024:65535 -j ACCEPT -m comment --comment "Mesos Slaves"
+  when: iptablesrules.stdout.find("Mesos") == -1
   sudo: yes
   tags: ['jenkins', 'firewall', 'jenkins_port']
 
