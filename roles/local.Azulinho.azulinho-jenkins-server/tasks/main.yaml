@@ -3,6 +3,10 @@
 # Creates a user for jenkins with the correct ssh key retrieved from the secrets
 # repository
 #
+- name: Gather facts
+  action: ec2_facts
+  tags: ['jenkins', 'hosts', 'mesos', 'jenkins_config']
+
 - name: create user for jenkins
   user: name=jenkins
     comment="Jenkins CI"
@@ -353,9 +357,6 @@
   notify:
     - safe-restart jenkins
 
-- name: Gather facts
-  action: ec2_facts
-  tags: ['jenkins', 'hosts', 'mesos']
 
 # add hostname to /etc/hosts
 # this is needed by the mesos_cloud plugin.
