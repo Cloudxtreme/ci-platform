@@ -265,8 +265,8 @@
   shell: "curl -D - --silent http://localhost:{{ azulinho_jenkins_server['port'] }}/cli/"
   register: result
   until: (result.stdout.find("200 OK") != -1) and (result.stdout.find("Please wait while") == -1)
-  retries: connection_retries
-  delay:  connection_retry_delay
+  retries: 300
+  delay:  1
   changed_when: false
 
 # Create Jenkins CLI destination directory
