@@ -4,6 +4,10 @@
   serial: 1
   sudo: true
 
+  pre_tasks:
+    - name: gather ec2 facts
+      action: ec2_facts
+
   roles:
     # disable selinux, required on aws
     - local.disable_selinux
