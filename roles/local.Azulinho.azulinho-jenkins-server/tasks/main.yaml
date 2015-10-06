@@ -287,6 +287,7 @@
 # Login usin the CLI
 - name: Login to Jenkins using CLI
   shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }} login --username {{ azulinho_jenkins_server['user'] }} --password {{ azulinho_jenkins_server['password'] }}
+  tags: ['jenkins', 'jenkins_config']
 
 # Lets deploy the Credentials file,
 # Jenkins encrypts the passwords locally on the server based on a couple of
