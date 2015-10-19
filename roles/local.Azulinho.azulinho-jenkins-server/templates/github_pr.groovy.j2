@@ -1,0 +1,6 @@
+import hudson.util.Secret
+
+{% set cfg=azulinho_jenkins_server %}
+{% set github_pr_secret=cfg['github_pr']['secret'] %}
+def secret = Secret.fromString('{{ github_pr_secret }}')
+println(secret.getEncryptedValue())
