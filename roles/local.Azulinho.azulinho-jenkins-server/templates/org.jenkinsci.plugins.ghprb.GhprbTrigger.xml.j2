@@ -2,13 +2,13 @@
 {% set cfg=azulinho_jenkins_server['github_pr'] %}
 <org.jenkinsci.plugins.ghprb.GhprbTrigger_-DescriptorImpl plugin="ghprb@1.29">
   <configVersion>{{ cfg['configVersion'] }}</configVersion>
-  <whitelistPhrase>{{ cfg['whiteListPhrase'] }}</whitelistPhrase>
+  <whitelistPhrase>{{ cfg['whitelistPhrase'] }}</whitelistPhrase>
   <okToTestPhrase>{{ cfg['okToTestPhrase'] }} </okToTestPhrase>
   <retestPhrase>{{ cfg['retestPhrase'] }}</retestPhrase>
   <skipBuildPhrase>{{ cfg['skipBuildPhrase'] }}</skipBuildPhrase>
   <cron>{{ cfg['cron'] }}</cron>
   <useComments>{{ cfg['useComments'] }}</useComments>
-  <useDetailedComments>{{ cfg['useDetailedComents'] }}</useDetailedComments>
+  <useDetailedComments>{{ cfg['useDetailedComments'] }}</useDetailedComments>
   <unstableAs>{{ cfg['unstableAs'] }}</unstableAs>
   <autoCloseFailedPullRequests>{{ cfg['autoCloseFailedPullRequests'] }}</autoCloseFailedPullRequests>
   <displayBuildErrorsOnDownstreamBuilds>{{ cfg['displayBuildErrorsOnDownstreamBuilds'] }}</displayBuildErrorsOnDownstreamBuilds>
@@ -30,6 +30,22 @@
       <triggeredStatus>{{ cfg['triggeredStatus'] }}</triggeredStatus>
       <startedStatus>{{ cfg['startedStatus'] }}</startedStatus>
       <statusUrl>{{ cfg['statusUrl'] }}</statusUrl>
+
+      <completedStatus>
+        <org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+          <message>Build OK</message>
+          <result>SUCCESS</result>
+        </org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+        <org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+          <message>Build Error</message>
+          <result>ERROR</result>
+        </org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+        <org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+          <message>Build Failure</message>
+          <result>FAILURE</result>
+        </org.jenkinsci.plugins.ghprb.extensions.comments.GhprbBuildResultMessage>
+      </completedStatus>
+
     </org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
   </extensions>
 </org.jenkinsci.plugins.ghprb.GhprbTrigger_-DescriptorImpl>

@@ -359,6 +359,16 @@
   notify:
     - safe-restart jenkins
 
+- name: Deploy the Github PR configuration file
+  template: dest={{ azulinho_jenkins_server['lib'] }}/org.jenkinsci.plugins.ghprb.GhprbTrigger.xml
+    src=org.jenkinsci.plugins.ghprb.GhprbTrigger.xml.j2
+    owner=jenkins
+    group=jenkins
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'github_pr', 'credentials']
+  notify:
+    - safe-restart jenkins
+
+
 # Deploy the CloudBees Slave Configuration templates
 # we use these to specify which size our slaves should be
 - name: Create cloudbees CloudSlaveTemplates dir
