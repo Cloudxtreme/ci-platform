@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+{% set cfg=azulinho_jenkins_server['github_pr'] %}
+<org.jenkinsci.plugins.ghprb.GhprbTrigger_-DescriptorImpl plugin="ghprb@1.29">
+  <configVersion>{{ cfg['configVersion'] }}</configVersion>
+  <whitelistPhrase>{{ cfg['whiteListPhrase'] }}</whitelistPhrase>
+  <okToTestPhrase>{{ cfg['okToTestPhrase'] }} </okToTestPhrase>
+  <retestPhrase>{{ cfg['retestPhrase'] }}</retestPhrase>
+  <skipBuildPhrase>{{ cfg['skipBuildPhrase'] }}</skipBuildPhrase>
+  <cron>{{ cfg['cron'] }}</cron>
+  <useComments>{{ cfg['useComments'] }}</useComments>
+  <useDetailedComments>{{ cfg['useDetailedComents'] }}</useDetailedComments>
+  <unstableAs>{{ cfg['unstableAs'] }}</unstableAs>
+  <autoCloseFailedPullRequests>{{ cfg['autoCloseFailedPullRequests'] }}</autoCloseFailedPullRequests>
+  <displayBuildErrorsOnDownstreamBuilds>{{ cfg['displayBuildErrorsOnDownstreamBuilds'] }}</displayBuildErrorsOnDownstreamBuilds>
+  <githubAuth>
+    <org.jenkinsci.plugins.ghprb.GhprbGitHubAuth>
+      <serverAPIUrl>{{ cfg['serverAPIUrl'] }}</serverAPIUrl>
+      <credentialsId>{{ cfg['credentialsId'] }}</credentialsId>
+      <id>99999999-9999-9999-9999-999999999999</id>
+      <description>{{ cfg['description'] }}</description>
+      <secret></secret>
+    </org.jenkinsci.plugins.ghprb.GhprbGitHubAuth>
+  </githubAuth>
+  <adminlist>{{ cfg['adminList'] }}</adminlist>
+  <requestForTestingPhrase>{{ cfg['requestForTestingPhrase'] }}</requestForTestingPhrase>
+  <jobs/>
+  <extensions>
+    <org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
+      <commitStatusContext>{{ cfg['commitStatusContext'] }}</commitStatusContext>
+      <triggeredStatus>{{ cfg['triggeredStatus'] }}</triggeredStatus>
+      <startedStatus>{{ cfg['startedStatus'] }}</startedStatus>
+      <statusUrl>{{ cfg['statusUrl'] }}</statusUrl>
+    </org.jenkinsci.plugins.ghprb.extensions.status.GhprbSimpleStatus>
+  </extensions>
+</org.jenkinsci.plugins.ghprb.GhprbTrigger_-DescriptorImpl>
