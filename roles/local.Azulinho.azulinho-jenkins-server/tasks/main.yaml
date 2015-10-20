@@ -302,14 +302,14 @@
     src=ReturnJenkinsEncryptedString.groovy
     owner=jenkins
     group=jenkins
-  tags: ['jenkins', 'jenkins_config', 'jenkins_users']
+  tags: ['jenkins', 'jenkins_config', 'jenkins_users', 'credentials']
 
 - name: Deploy groovy script file for retrieving cloudbees password
   template: dest={{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
     src=cloudbees.groovy.j2
     owner=jenkins
     group=jenkins
-  tags: ['jenkins', 'jenkins_config', 'cloudbees']
+  tags: ['jenkins', 'jenkins_config', 'cloudbees', 'credentials']
   notify:
     - safe-restart jenkins
 
@@ -318,20 +318,20 @@
     src=github_pr.groovy.j2
     owner=jenkins
     group=jenkins
-  tags: ['jenkins', 'jenkins_config', 'github_pr']
+  tags: ['jenkins', 'jenkins_config', 'github_pr', 'credentials']
   notify:
     - safe-restart jenkins
 
 - name: Retrieve the CloudBees password from Jenkins
   shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }}/ groovy {{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
-  tags: ['jenkins', 'jenkins_config', 'cloudbees']
+  tags: ['jenkins', 'jenkins_config', 'cloudbees', 'credentials']
   register: cloudbees_encrypted_password
   notify:
     - safe-restart jenkins
 
 - name: Retrieve the github_pr secret from Jenkins
   shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }}/ groovy {{ azulinho_jenkins_server['lib'] }}/github_pr.groovy
-  tags: ['jenkins', 'jenkins_config', 'github_pr']
+  tags: ['jenkins', 'jenkins_config', 'github_pr', 'credentials']
   register: github_pr_secret
   notify:
     - safe-restart jenkins
@@ -339,14 +339,14 @@
 - name: Remove the cloudbees groovy file
   file: path={{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
     state=absent
-  tags: ['jenkins', 'jenkins_config', 'cloudbees']
+  tags: ['jenkins', 'jenkins_config', 'cloudbees', 'credentials']
   notify:
     - safe-restart jenkins
 
 - name: Remove the github_pr groovy file
   file: path={{ azulinho_jenkins_server['lib'] }}/github_pr.groovy
     state=absent
-  tags: ['jenkins', 'jenkins_config', 'github_pr']
+  tags: ['jenkins', 'jenkins_config', 'github_pr', 'credentials']
   notify:
     - safe-restart jenkins
 
@@ -355,7 +355,7 @@
     src=credentials.xml.j2
     owner=jenkins
     group=jenkins
-  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'cloudbees']
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'cloudbees', 'credentials']
   notify:
     - safe-restart jenkins
 
