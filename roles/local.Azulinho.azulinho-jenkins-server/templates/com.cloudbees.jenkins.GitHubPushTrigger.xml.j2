@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+{% set cfg=azulinho_jenkins_server %}
+<com.cloudbees.jenkins.GitHubPushTrigger_-DescriptorImpl plugin="github@1.10">
+  <manageHook>true</manageHook>
+  <credentials>
+    <com.cloudbees.jenkins.Credential>
+      <username>{{ cfg['github_pr']['user'] }}</username>
+      <apiUrl>{{ cfg['github_pr']['serverAPIUrl'] }}</apiUrl>
+      <oauthAccessToken>{{ cfg['github_pr']['secret'] }}</oauthAccessToken>
+    </com.cloudbees.jenkins.Credential>
+  </credentials>
+</com.cloudbees.jenkins.GitHubPushTrigger_-DescriptorImpl>
+
