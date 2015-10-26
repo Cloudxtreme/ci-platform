@@ -313,6 +313,15 @@
   notify:
     - safe-restart jenkins
 
+- name: Deploy groovy script file for retrieving github_pr secret
+  template: dest={{ azulinho_jenkins_server['lib'] }}/github_pr.groovy
+    src=github_pr.groovy.j2
+    owner=jenkins
+    group=jenkins
+  tags: ['jenkins', 'jenkins_config', 'github_pr']
+  notify:
+    - safe-restart jenkins
+
 - name: Retrieve the CloudBees password from Jenkins
   shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }}/ groovy {{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
   tags: ['jenkins', 'jenkins_config', 'cloudbees']
@@ -320,10 +329,24 @@
   notify:
     - safe-restart jenkins
 
-- name: Remove the cloubees groovy file
+- name: Retrieve the github_pr secret from Jenkins
+  shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }}/ groovy {{ azulinho_jenkins_server['lib'] }}/github_pr.groovy
+  tags: ['jenkins', 'jenkins_config', 'github_pr']
+  register: github_pr_secret
+  notify:
+    - safe-restart jenkins
+
+- name: Remove the cloudbees groovy file
   file: path={{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
     state=absent
   tags: ['jenkins', 'jenkins_config', 'cloudbees']
+  notify:
+    - safe-restart jenkins
+
+- name: Remove the github_pr groovy file
+  file: path={{ azulinho_jenkins_server['lib'] }}/github_pr.groovy
+    state=absent
+  tags: ['jenkins', 'jenkins_config', 'github_pr']
   notify:
     - safe-restart jenkins
 
