@@ -7,6 +7,9 @@
   pre_tasks:
     - name: gather ec2 facts
       action: ec2_facts
+      tags:
+        - facts
+        - always
 
   roles:
     # disable selinux, required on aws
