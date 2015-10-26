@@ -26,7 +26,7 @@
     - jenkins_job_dsl
 
 # we keep the XML seed job definitions in :
-# <role>/files/seed_jobs_definitions/*.xml
+# <role>/files/seed_jobs_definitions/
 #
 - name: upload jenkins seed jobs definitions
   copy: dest="/etc/jenkins_seed_jobs/seeds/{{ ''.join(item.split('/')[-1:]) }}"
