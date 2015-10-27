@@ -76,4 +76,5 @@
   command: scl enable devtoolset-2 /var/lib/jenkins/mesos-0.21.1/build/build.sh
   args:
     chdir: /var/lib/jenkins/mesos-0.21.1/build
+    creates: /usr/local/lib/libmesos.so
   tags: mesos
