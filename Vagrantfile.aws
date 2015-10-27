@@ -47,7 +47,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         aws.security_groups = ['ssh', 'http', 'jenkins-master', 'high-ports']
         aws.ami = "ami-a9de9c99"
         aws.region = "us-west-2"
-        aws.instance_type = "m3.large"
+        aws.instance_type = "m3.xlarge"
         aws.tags = {
           'name' => 'jenkins-master-vagrant',
           'owner' => ENV['USER']
