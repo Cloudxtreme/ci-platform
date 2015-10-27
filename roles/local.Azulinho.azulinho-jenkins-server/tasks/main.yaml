@@ -186,7 +186,7 @@
 - name: Deploy jenkins slave init script
   template: dest=/etc/slave_config/CommandLineScript.sh
     src=CommandLineScript.sh.j2
-  tags: ['jenkins', 'jenkins_config']
+  tags: ['jenkins', 'jenkins_config', 'jenkins_slave_setup']
   notify:
     - safe-restart jenkins
 
