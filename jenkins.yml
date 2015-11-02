@@ -31,6 +31,9 @@
     # jenkins role installs jenkins
     - local.Azulinho.azulinho-jenkins-server
 
+    # deploy S3 credentials to the staging-docs bucket
+    - local.deploy_aws_s3_docs_staging_creds
+
     - local.build-mesos-native-library
 
       # jenkins-plugins role installs the jenkins-plugins

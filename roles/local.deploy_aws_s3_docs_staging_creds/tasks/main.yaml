@@ -1,0 +1,26 @@
+---
+
+# Deploys the secrets used in the run_sphinx job.
+# The run_sphinx jenkins job uploads the html files produced by sphinx to a
+# S3 bucket 'staging-docs'.
+# These steps deploy the file /etc/slave_config/s3_staging_docs_clusterhq_com.sh
+# on the jenkins master, which contains the credentials for the user that
+# uploads the htmls files to the S3 bucket.
+#
+# This file is deployed to the slaves through the Jenkins slave-setup plugin.
+# The run_sphinx job sources this file during the job build execution.
+#
+- name: gather AWS S3 AWS_ACCESS_KEY_ID used in the run_sphinx job
+  command: echo {{s3_staging_docs_clusterhq_com['upload_user']['aws_access_key_id'] }}
+  register: aws_access_key_id
+  tags: ['jenkins', 'jenkins_config', 'run_sphinx', 'docs_clusterhq_com', 's3']
+
+- name: gather AWS S3 AWS_SECRET_KEY used in the run_sphinx job
+  command: echo {{s3_staging_docs_clusterhq_com['upload_user']['aws_secret_key']}}
+  register: aws_secret_key
+  tags: ['jenkins', 'jenkins_config', 'run_sphinx', 'docs_clusterhq_com', 's3']
+
+- name: deploy AWS credentials for the user used in the run_sphinx job
+  copy: content="export AWS_ACCESS_KEY_ID={{aws_access_key_id}}; export AWS_SECRET_KEY={{aws_secret_key}}"
+    dest=/etc/slave_config/s3_staging_docs_clusterhq_com.sh
+  tags: ['jenkins', 'jenkins_config', 'run_sphinx', 'docs_clusterhq_com', 's3']
