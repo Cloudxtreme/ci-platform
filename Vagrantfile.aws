@@ -22,9 +22,9 @@ boxes = [
 ]
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.hostmanager.enabled      = false
-  config.hostmanager.include_offline  = false
-  config.hostmanager.manage_host   = false
+  config.hostmanager.enabled      = true
+  config.hostmanager.include_offline  = true
+  config.hostmanager.manage_host   = true
   config.hostmanager.ignore_private_ip = true
   config.vm.provision :hostmanager
   config.ssh.insert_key = false
