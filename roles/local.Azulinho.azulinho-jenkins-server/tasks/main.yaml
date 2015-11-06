@@ -25,8 +25,8 @@
 # we don't have enough space for logs in the / filesystem so we dump our logs
 # to the EBS volume
 - name: symlink /var/log/jenkins to /data/jenkins.log
-  file: src=/var/log/jenkins/jenkins.log
-    dest=/data/jenkins.log
+  file: dest=/var/log/jenkins/jenkins.log
+    src=/data/jenkins.log
     owner=jenkins
     group=jenkins
     state=link
