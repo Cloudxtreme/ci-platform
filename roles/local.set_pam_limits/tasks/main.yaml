@@ -1,11 +1,11 @@
 # increases nfiles required for Jenkins
 #
 #
-name: increases nfiles
-pam_limits: domain=jenkins limit_type=soft limit_item=nofile value=1000000
-with_items:
-  - { domain: 'jenkins', limit_type: 'soft', limit_item: 'nofile', value: 32768 }
-  - { domain: 'jenkins', limit_type: 'hard', limit_item: 'nofile', value: 65535 }
-  - { domain: 'jenkins', limit_type: 'soft', limit_item: 'noproc', value: 8192 }
-  - { domain: 'jenkins', limit_type: 'hard', limit_item: 'noproc', value: 16384 }
-tags: limits_conf
+- name: increases nfiles
+  pam_limits: domain=jenkins limit_type=soft limit_item=nofile value=1000000
+  with_items:
+    - { domain: 'jenkins', limit_type: 'soft', limit_item: 'nofile', value: 32768 }
+    - { domain: 'jenkins', limit_type: 'hard', limit_item: 'nofile', value: 65535 }
+    - { domain: 'jenkins', limit_type: 'soft', limit_item: 'noproc', value: 8192 }
+    - { domain: 'jenkins', limit_type: 'hard', limit_item: 'noproc', value: 16384 }
+  tags: limits_conf
