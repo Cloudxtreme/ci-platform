@@ -22,6 +22,17 @@
     state=directory
   tags: ['jenkins']
 
+# we don't have enough space for logs in the / filesystem so we dump our logs
+# to the EBS volume
+- name: symlink /var/log/jenkins to /data/jenkins.log
+  file: src=/var/log/jenkins.log
+    dest=/data/jenkins.log
+    owner=jenkins
+    group=jenkins
+    state=link
+    force=True
+  tags: logs
+
 # We install a specific version of jenkins to avoid compability
 # issues with plugins
 #
