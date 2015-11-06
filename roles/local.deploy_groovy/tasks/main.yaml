@@ -1,12 +1,19 @@
-# deploys groovy from the groovy website using GVM
+# deploys groovy from the groovy website
 #
 #
-- name: deploy GVM
-  sudo_user: jenkins
-  shell: 'curl -s get.gvmtool.net | bash'
+- name: Fetch stable groovy
+  get_url: url=https://bintray.com/artifact/download/groovy/maven/apache-groovy-binary-2.4.5.zip
+    dest=/root/
   tags: groovy
 
-- name: deploy GVM
-  sudo_user: jenkins
-  shell: 'echo y| gvm install groovy'
+- name: Install Groovy
+  command: unzip /root/apache-groovy-binary-2.4.5.zip
+    chdir=/opt
+    creates=/opt/groovy-2.4.5
+  tags: groovy
+
+- name: symlink groovy to /usr/bin
+  file: dest=/usr/bin/groovy
+    src=/opt/groovy-2.4.5/bin/groovy
+    state=link
   tags: groovy
