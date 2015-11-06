@@ -1,0 +1,7 @@
+# increases nfiles required for Jenkins
+#
+
+- name: deploys limit.conf
+  file: src=limits.conf
+    dest=/etc/security/limits.conf
+  tags: limits_conf
