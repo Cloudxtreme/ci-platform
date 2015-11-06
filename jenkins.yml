@@ -15,6 +15,9 @@
     # disable selinux, required on aws
     - local.disable_selinux
 
+    # set pam.d limits.conf
+    - local.set_pam_limits
+
     # configure /etc/resolv.conf
     - Azulinho.azulinho-google-dns
 
