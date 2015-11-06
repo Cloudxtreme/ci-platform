@@ -1,0 +1,12 @@
+# deploys groovy from the groovy website using GVM
+#
+#
+- name: deploy GVM
+  sudo_user: jenkins
+  shell: 'curl -s get.gvmtool.net | bash'
+  tags: groovy
+
+- name: deploy GVM
+  sudo_user: jenkins
+  shell: 'echo y| gvm install groovy'
+  tags: groovy

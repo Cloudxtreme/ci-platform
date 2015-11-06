@@ -54,3 +54,6 @@
     # deploy jobs using the groovy DSL
     - local.Azulinho.azulinho-jenkins-reconfigure-jobs-using-job-dsl
 
+    # deploy the groovy interpreter
+    - local.deploy_groovy
+
