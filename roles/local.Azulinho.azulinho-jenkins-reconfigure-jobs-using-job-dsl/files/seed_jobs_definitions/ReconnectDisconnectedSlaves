@@ -63,3 +63,4 @@ for (slave in Jenkins.instance.slaves) {
   <buildWrappers>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.7.1"/>
   </buildWrappers>
+</project>

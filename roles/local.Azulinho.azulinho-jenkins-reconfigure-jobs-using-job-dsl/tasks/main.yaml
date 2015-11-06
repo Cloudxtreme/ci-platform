@@ -49,8 +49,7 @@
 #
 - name: upload new job and ignore errors if it already exists
   shell: curl -X POST "http://localhost:8080/createItem?name={{item}}" --user {{azulinho_jenkins_server['user']}}:{{azulinho_jenkins_server['password']}} --data-binary "@/etc/jenkins_seed_jobs/seeds/{{item}}" -H "Content-Type:text/xml"
-  with_items:
-    - "{{ _seed_dsl_jobs.stdout }}"
+  with_items: "{{ _seed_dsl_jobs.stdout.split('\n') }}"
   tags:
     - jenkins_job_dsl
 
@@ -58,7 +57,6 @@
 #
 - name: update jobs if they already exist
   shell: curl -X POST "http://localhost:8080/job/{{item}}/config.xml" --user {{azulinho_jenkins_server['user']}}:{{azulinho_jenkins_server['password']}} --data-binary "@/etc/jenkins_seed_jobs/seeds/{{item}}" -H "Content-Type:text/xml"
-  with_items:
-    - "{{ _seed_dsl_jobs.stdout }}"
+  with_items: "{{ _seed_dsl_jobs.stdout.split('\n') }}"
   tags:
     - jenkins_job_dsl
