@@ -48,7 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         aws.ami = "ami-1255b321"
         aws.region = "us-west-2"
         aws.instance_type = "t2.large"
-        aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 32 }]
+        aws.block_device_mapping = [{ 'DeviceName' => '/dev/xvda1', 'Ebs.VolumeSize' => 32 }]
         aws.tags = {
           'name' => 'jenkins-master-vagrant',
           'owner' => ENV['USER']
