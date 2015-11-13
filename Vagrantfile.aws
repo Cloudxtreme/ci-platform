@@ -45,9 +45,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         aws.secret_access_key = ENV['AWS_SECRET_KEY']
         aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
         aws.security_groups = ['ssh', 'http', 'jenkins-master', 'high-ports']
-        aws.ami = "ami-a9de9c99"
+        aws.ami = "ami-1255b321"
         aws.region = "us-west-2"
-        aws.instance_type = "m3.xlarge"
+        aws.instance_type = "t2.large"
+        aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 32 }]
         aws.tags = {
           'name' => 'jenkins-master-vagrant',
           'owner' => ENV['USER']
@@ -56,8 +57,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         override.ssh.private_key_path = ENV['AWS_KEYPAIR_FILEPATH']
         machine.vm.box = "#{opts[:name].to_s}-aws"
         override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-        override.ssh.username = 'root'
-        machine.ssh.username = 'root'
+        override.ssh.username = 'centos'
+        machine.ssh.username = 'centos'
         machine.ssh.private_key_path = ENV['AWS_KEYPAIR_FILEPATH']
       end
 
