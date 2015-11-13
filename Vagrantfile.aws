@@ -50,7 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         aws.instance_type = "t2.large"
         aws.block_device_mapping = [{ 'DeviceName' => '/dev/xvda1',
                                       'Ebs.VolumeSize' => 32,
-                                      'Ebs.DeleteOnTermination' => true'}]
+                                      'Ebs.DeleteOnTermination' => true}]
         aws.tags = {
           'name' => 'jenkins-master-vagrant',
           'owner' => ENV['USER']
