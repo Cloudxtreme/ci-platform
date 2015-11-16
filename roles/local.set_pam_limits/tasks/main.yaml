@@ -2,6 +2,6 @@
 #
 
 - name: deploys limit.conf
-  file: src=limits.conf
+  copy: src=limits.conf
     dest=/etc/security/limits.conf
   tags: limits_conf
