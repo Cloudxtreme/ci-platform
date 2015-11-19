@@ -273,7 +273,7 @@
 # # wish there was a jenkins-cli rpm package
 #
 - name: Wait for Jenkins to start up before proceeding.
-  shell: "curl -D - --silent http://localhost:{{ azulinho_jenkins_server['port'] }}/cli/"
+  shell: "curl -D - --silent http://{{ azulinho_jenkins_server['user'] }}:{{ azulinho_jenkins_server['apiToken'] }}@localhost:{{ azulinho_jenkins_server['port'] }}/cli/"
   register: result
   until: (result.stdout.find("200 OK") != -1) and (result.stdout.find("Please wait while") == -1)
   retries: 300
