@@ -10,6 +10,14 @@
   </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>25</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.22">
       <autoRebuild>false</autoRebuild>
     </com.sonyericsson.rebuild.RebuildSettings>
@@ -42,16 +50,29 @@ import jenkins.model.*
 import hudson.*
 import hudson.model.*
 
+def OfflineSlaves = []
+  
 for (slave in Jenkins.instance.slaves) {
   computer = slave.computer
 
   def isOK = slave.getComputer().isOnline()
 
   if (!isOK) {
+        OfflineSlaves &lt;&lt; slave
+    }
+}
+
+if (OfflineSlaves.size != 0) {
+   sleep(180000)
+}
+
+for (slave in OfflineSlaves) {
+  computer = slave.computer
+  
+  def isOK = slave.getComputer().isOnline()
+    if (!isOK) {
     println computer.name
     computer.launch()
-
-
     }
 }</command>
       </scriptSource>
@@ -61,6 +82,14 @@ for (slave in Jenkins.instance.slaves) {
   </builders>
   <publishers/>
   <buildWrappers>
+    <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.14">
+      <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
+        <timeoutMinutes>4</timeoutMinutes>
+      </strategy>
+      <operationList>
+        <hudson.plugins.build__timeout.operations.AbortOperation/>
+      </operationList>
+    </hudson.plugins.build__timeout.BuildTimeoutWrapper>
     <hudson.plugins.timestamper.TimestamperBuildWrapper plugin="timestamper@1.7.1"/>
   </buildWrappers>
 </project>
