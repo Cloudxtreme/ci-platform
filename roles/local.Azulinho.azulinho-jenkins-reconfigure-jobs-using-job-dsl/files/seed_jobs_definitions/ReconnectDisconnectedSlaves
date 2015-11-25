@@ -36,7 +36,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <hudson.triggers.TimerTrigger>
-      <spec>H/5 * * * * </spec>
+      <spec>H/15 * * * * </spec>
     </hudson.triggers.TimerTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
@@ -51,7 +51,7 @@ import hudson.*
 import hudson.model.*
 
 def OfflineSlaves = []
-  
+
 for (slave in Jenkins.instance.slaves) {
   computer = slave.computer
 
@@ -63,12 +63,12 @@ for (slave in Jenkins.instance.slaves) {
 }
 
 if (OfflineSlaves.size != 0) {
-   sleep(180000)
+   sleep(600000)
 }
 
 for (slave in OfflineSlaves) {
   computer = slave.computer
-  
+
   def isOK = slave.getComputer().isOnline()
     if (!isOK) {
     println computer.name
