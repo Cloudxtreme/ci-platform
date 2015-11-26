@@ -208,6 +208,13 @@
   notify:
     - safe-restart jenkins
 
+- name: Deploy AWS UFT terraform file
+  template: dest=/etc/slave_config/get_aws_credentials_uft.sh
+    src=get_aws_credentials_uft.sh.j2
+  tags: ['jenkins', 'jenkins_config', 'uft']
+  notify:
+    - safe-restart jenkins
+
 - name: Deploy nodeMonitors file
   template: dest=/var/lib/jenkins/nodeMonitors.xml
     src=nodeMonitors.xml.j2
