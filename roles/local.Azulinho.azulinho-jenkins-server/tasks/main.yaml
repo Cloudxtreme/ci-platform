@@ -172,6 +172,11 @@
     dest=/etc/slave_config/pip.sh
   tags: ['jenkins', 'jenkins_config']
 
+- name: add github credentials file
+  copy: content="export GITHUB_STATUS_USERNAME=http://{{github_jenkins_credentials['username']}}; export GITHUB_STATUS_API_TOKEN={{github_jenkins_credentials['api_token']}}; export JENKINS_URL={{azulinho_jenkins_server['jenkins_url']}}"
+    dest=/etc/slave_config/github_status.sh
+  tags: ['jenkins', 'jenkins_config', 'github_status']
+
 - name: copy /etc/sysconfig/docker for centos7 to /etc/slave_config
   template: dest=/etc/slave_config/docker.centos7
     src=docker.centos7.j2
