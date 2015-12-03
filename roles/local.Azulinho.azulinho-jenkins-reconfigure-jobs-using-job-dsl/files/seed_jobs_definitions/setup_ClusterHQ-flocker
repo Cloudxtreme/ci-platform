@@ -60,7 +60,7 @@
       <spec></spec>
     </com.cloudbees.jenkins.GitHubPushTrigger>
   </triggers>
-  <concurrentBuild>false</concurrentBuild>
+  <concurrentBuild>true</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
       <command>/usr/local/bin/python2.7 /usr/local/bin/render.py</command>
