@@ -1,0 +1,21 @@
+- name: Create swap space
+  command: dd if=/dev/zero of=/data/swapfile bs=1M count=4096
+  when: ansible_swaptotal_mb < 1
+  tags:
+    - swapfile
+
+- name: Make swap
+  command: mkswap /data/swapfile
+  when: ansible_swaptotal_mb < 1
+  tags:
+    - swapfile
+
+- name: Add to fstab
+  action: lineinfile dest=/etc/fstab regexp="swapfile" line="/data/swapfile none swap sw 0 0" state=present
+  tags:
+    - swapfile
+
+- name: Turn swap on
+  command: swapon -a
+  tags:
+    - swapfile

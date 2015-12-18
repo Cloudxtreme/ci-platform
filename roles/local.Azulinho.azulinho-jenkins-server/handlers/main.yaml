@@ -8,3 +8,6 @@
 - name: safe-restart jenkins
   sudo: yes
   shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }} safe-restart
+
+- name: restart iptables
+  service: name=iptables  state=restarted

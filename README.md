@@ -42,3 +42,11 @@ for aws, you need to export your aws environment variables.
     export AWS_KEYPAIR_NAME
     export AWS_KEYPAIR_FILEPATH
 
+
+Updating the master jenkins box
+================================
+
+1. Download the latest vagrant state files from S3
+    aws s3 sync --delete s3://clusterhq-fabric-instance-state/ci-live/.vagrant .vagrant
+
+2. vagrant provision

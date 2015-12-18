@@ -10,8 +10,8 @@
         <profile>{{ item.profile }}</profile>
         <retentionTime>{{ item.retentionTime }}</retentionTime>
         <instanceCap>{{ item.instanceCap }}</instanceCap>
-        <scriptTimeout>{{ item.scripTimeout |default('600000')}}</scriptTimeout>
-        <startTimeout>{{ item.startTimeout |default('600000')}}</startTimeout>
+        <scriptTimeout>{{ item.scriptTimeout |default('1800000')}}</scriptTimeout>
+        <startTimeout>{{ item.startTimeout |default('1800000')}}</startTimeout>
         <templates>
 {%  for t in item.templates %}
             <jenkins.plugins.jclouds.compute.JCloudsSlaveTemplate>

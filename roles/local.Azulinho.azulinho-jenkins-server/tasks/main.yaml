@@ -7,12 +7,59 @@
   action: ec2_facts
   tags: ['jenkins', 'hosts', 'mesos', 'jenkins_config']
 
+- name: instal partprobe, part of parted
+  yum:
+    name: parted
+
+- name: create partition
+  shell: grep '/data/' /proc/mounts || (echo -e "n\np\n2\n\n\nw" | fdisk /dev/xvda)
+  ignore_errors: True
+
+- name: re-read partition table
+  shell: grep '/data/' /proc/mounts || partx -v -a /dev/xvda
+  ignore_errors: True
+
+- name: create /data
+  shell: grep '/data' /proc/mounts ||  mkfs.ext4 /dev/xvda2
+
+- name: mount /data
+  mount:
+    name=/data
+    src=/dev/xvda2
+    fstype=ext4
+    state=mounted
+
 - name: create user for jenkins
   user: name=jenkins
     comment="Jenkins CI"
     home="/var/lib/jenkins"
     shell="/bin/bash"
   tags: ['jenkins']
+
+- name: create directories
+  file:
+    path={{ item }}
+    state=directory
+    owner=jenkins
+    group=jenkins
+    force=True
+  with_items:
+    - /data/jenkins-jobs
+    - /data/jenkins-logs
+    - /data/tmp
+
+- name: create symlinks
+  file:
+    src={{ item.src }}
+    dest={{ item.dest }}
+    state=link
+    owner=jenkins
+    group=jenkins
+    force=True
+  with_items:
+    - { dest: '/var/lib/jenkins/jobs', src: '/data/jenkins-jobs' }
+    - { dest: '/var/log/jenkins', src: '/data/jenkins-logs' }
+
 
 - name: make sure /var/lib/jenkins/.ssh exists
   file: path=/var/lib/jenkins/.ssh
@@ -22,16 +69,6 @@
     state=directory
   tags: ['jenkins']
 
-# we don't have enough space for logs in the / filesystem so we dump our logs
-# to the EBS volume
-# - name: symlink /var/log/jenkins to /data/jenkins.log
-#   file: dest=/var/log/jenkins/jenkins.log
-#     src=/data/jenkins.log
-#     owner=jenkins
-#     group=jenkins
-#     state=link
-#     force=True
-#   tags: logs
 
 # We install a specific version of jenkins to avoid compability
 # issues with plugins
@@ -42,11 +79,9 @@
     regexp='^.:jenkins-.*'
   tags: ['jenkins', 'versionlock']
 
-- name: Ensure jenkins is installed
-  yum: name=jenkins-{{ azulinho_jenkins_server['version']}}
-    enablerepo=epel
-    state=present
-  register: _jenkins_install
+- name: install specific version of jenkins
+  yum:
+    name=http://pkg.jenkins-ci.org/redhat-stable/jenkins-{{ azulinho_jenkins_server['version']}}.noarch.rpm
   tags: ['jenkins', 'versionlock']
 
 - name: lock jenkins
@@ -66,33 +101,12 @@
   notify:
     - safe-restart jenkins
 
-- name: get iptable rules
-  shell: iptables -L
-  register: iptablesrules
-  sudo: yes
-  tags: ['jenkins', 'firewall', 'jenkins_port']
-
-- name: add jenkins rule for jenkins port
-  command: /sbin/iptables -I INPUT 1 -p tcp --dport {{ azulinho_jenkins_server['port'] }} -j ACCEPT -m comment --comment "Jenkins"
-  when: iptablesrules.stdout.find("Jenkins") == -1
-  sudo: yes
-  tags: ['jenkins', 'firewall', 'jenkins_port']
-
-- name: add jenkins firewall rule for mesos slaves
-  command: /sbin/iptables -I INPUT 2 -p tcp --match multiport --dports 1024:65535 -j ACCEPT -m comment --comment "Mesos Slaves"
-  when: iptablesrules.stdout.find("Mesos") == -1
-  sudo: yes
-  tags: ['jenkins', 'firewall', 'jenkins_port']
-
-- name: save iptables
-  command: service iptables save
-  sudo: yes
-  tags: ['jenkins', 'firewall', 'jenkins_port']
-
-- name: restart iptables
-  service: name=iptables state=restarted
-  sudo: yes
-  tags: ['jenkins', 'firewall', 'jenkins_port']
+- name: disable iptables
+  service:
+    name=iptables
+    enabled=no
+    state=stopped
+  ignore_errors: True
 
 - name: Configure Jenkins Prefix
   sudo: yes
@@ -145,6 +159,22 @@
         owner=jenkins
         group=jenkins
   tags: ['jenkins', 'jenkins_config']
+  notify:
+    - safe-restart jenkins
+
+- name: Deploy GlobalBuildStats plugin config
+  template: dest=/var/lib/jenkins/global-build-stats.xml
+    src=do_global_build_stats_plugin.xml.j2
+  tags: ['jenkins', 'jenkins_config', 'jenkins_stats']
+  notify:
+    - safe-restart jenkins
+
+- name: update jenkins GlobalBuildStats plugin config
+  file: path=/var/lib/jenkins/global-build-stats.xml
+        state=file
+        owner=jenkins
+        group=jenkins
+  tags: ['jenkins', 'jenkins_config', 'jenkins_stats']
   notify:
     - safe-restart jenkins
 
@@ -237,10 +267,10 @@
   notify:
     - safe-restart jenkins
 
-- name: increase jenkins JVM heap-size
+- name: Set JVM options for Jenkins
   lineinfile:
     dest=/etc/sysconfig/jenkins
-    line='JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Xmx8192m -Dorg.eclipse.jetty.server.Request.maxFormContentSize=5000000 "'
+    line='JENKINS_JAVA_OPTIONS=" -Djava.awt.headless=true -Xmx8192m -Dorg.eclipse.jetty.server.Request.maxFormContentSize=5000000 -Djava.io.tmpdir="/data/tmp" '
     state=present
   tags: ['jenkins', 'jenkins_config', 'jenkins_jvm']
   notify:
@@ -262,16 +292,6 @@
     group=jenkins
   with_items: azulinho_jenkins_server['users']
   tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'jenkins_users']
-
-# This is reallly really ugly, we need a lookup plugin
-#- name: Expand the users with encrypted API token string
-  #shell: "echo {{item['username']}} $(java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }}/ groovy {{ azulinho_jenkins_server['lib'] }}/ReturnJenkinsEncryptedString.groovy {{ item['apiToken'] }} )"
-  #tags: ['jenkins', 'jenkins_config', 'cloudbees']
-  #with_items: azulinho_jenkins_server['users']
-  #register: expanded_jenkins_users_passwords_api_token
-  #tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'jenkins_users']
-  #notify:
-    #- safe-restart jenkins
 
 - name: Deploy the jenkins users config files
   template: dest={{ azulinho_jenkins_server['lib'] }}/users/{{ item['username'] }}/config.xml

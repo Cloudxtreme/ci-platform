@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+{% set global_build_stats=azulinho_jenkins_server['global_build_stats']      %}
+<hudson.plugins.global__build__stats.GlobalBuildStatsPlugin version="9">
+  <buildStatConfigs>
+{% for graph in global_build_stats['graphs']                                 %}
+    <bsc plugin="global-build-stats@1.3">
+      <id>{{ graph.id }}</id>
+      <t>{{ graph.t }}</t>
+      <w>{{ graph.w }}</w>
+      <h>{{ graph.h }}</h>
+      <l>{{ graph.l }}</l>
+      <s>{{ graph.s }}</s>
+      <yact>COUNT</yact>
+      <ds>
+        <GBS__YACD>BUILD_COUNTER</GBS__YACD>
+        <GBS__YACD>BUILD_TOTAL_DURATION</GBS__YACD>
+        <GBS__YACD>BUILD_AVERAGE_DURATION</GBS__YACD>
+      </ds>
+      <f>
+        <jf>ALL</jf>
+        <nf>ALL</nf>
+        <lf>ALL</lf>
+        <sbr>15</sbr>
+      </f>
+    </bsc>
+{% endfor                                                                    %}
+  </buildStatConfigs>
+  <retentionStrategies>
+    <discardResultsOlderThanDays plugin="global-build-stats@1.3">
+      <days>{{ global_build_stats['retention'] }}</days>
+    </discardResultsOlderThanDays>
+    <keepExistingJobResultsOnly plugin="global-build-stats@1.3"/>
+  </retentionStrategies>
+</hudson.plugins.global__build__stats.GlobalBuildStatsPlugin>
