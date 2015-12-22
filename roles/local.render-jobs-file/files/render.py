@@ -1,13 +1,8 @@
-import jinja2
-import yaml
+#!/usr/bin/python2.7
+import os
 
-with open('build.yaml', 'r') as f:
-    cfg = yaml.load(f)
-
+if os.access("jobs.groovy.j2", os.R_OK):
     with open('jobs.groovy.j2', 'r') as j:
-        template = jinja2.Template(j.read())
-
-    output = template.render(cfg=cfg)
-
+        content = j.read()
     with open('jobs.groovy', 'w') as out_file:
-        out_file.write(output)
+        out_file.write(content)
