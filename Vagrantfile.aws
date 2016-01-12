@@ -10,9 +10,9 @@ end
 
 # Check that all the required environment variables have been set
 ENV['AWS_ACCESS_KEY_ID'] ? true : exit_with_message('AWS_ACCESS_KEY_ID not set')
-ENV['AWS_SECRET_KEY'] ? true : exit_with_message('AWS_SECRET_KEY not set')
-ENV['AWS_KEYPAIR_NAME'] ? true : exit_with_message('AWS_KEYPAIR_NAME not set')
-ENV['AWS_KEYPAIR_FILEPATH'] ? true : exit_with_message('AWS_KEYPAIR_FILEPATH not set')
+ENV['AWS_SECRET_ACCESS_KEY'] ? true : exit_with_message('AWS_SECRET_ACCESS_KEY not set')
+ENV['AWS_KEY_PAIR'] ? true : exit_with_message('AWS_KEY_PAIR not set')
+ENV['AWS_KEY_FILENAME'] ? true : exit_with_message('AWS_KEY_FILENAME not set')
 
 boxes = [
   {
@@ -42,8 +42,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       machine.vm.provider :aws do |aws, override|
         aws.access_key_id = ENV['AWS_ACCESS_KEY_ID']
-        aws.secret_access_key = ENV['AWS_SECRET_KEY']
-        aws.keypair_name = ENV['AWS_KEYPAIR_NAME']
+        aws.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+        aws.keypair_name = ENV['AWS_KEY_PAIR']
         aws.security_groups = ['ssh', 'http', 'jenkins-master', 'high-ports']
         aws.ami = "ami-1255b321"
         aws.region = "us-west-2"
@@ -56,12 +56,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           'owner' => ENV['USER']
         }
 
-        override.ssh.private_key_path = ENV['AWS_KEYPAIR_FILEPATH']
+        override.ssh.private_key_path = ENV['AWS_KEY_FILENAME']
         machine.vm.box = "#{opts[:name].to_s}-aws"
         override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
         override.ssh.username = 'centos'
         machine.ssh.username = 'centos'
-        machine.ssh.private_key_path = ENV['AWS_KEYPAIR_FILEPATH']
+        machine.ssh.private_key_path = ENV['AWS_KEY_FILENAME']
       end
 
       config.vm.synced_folder ".", "/vagrant", disabled: true
