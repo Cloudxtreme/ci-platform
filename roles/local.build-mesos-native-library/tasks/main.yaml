@@ -4,9 +4,18 @@
     url=http://linuxsoft.cern.ch/cern/devtoolset/slc6-devtoolset.repo
   tags: mesos
 
+# We use a local file as CERN removed the key from their webserver
+# We copy to the filesystem because of
+# https://github.com/ansible/ansible-modules-core/issues/1853
+- name: copy CERN GPG key
+  copy: dest=/tmp/RPM-GPG-KEY-cern
+      src=RPM-GPG-KEY-cern
+  tags: mesos
+
 - name: import CERN GPG key
   rpm_key: state=present
-    key=http://linuxsoft.cern.ch/cern/centos/7/os/x86_64/RPM-GPG-KEY-cern
+      key=/tmp/RPM-GPG-KEY-cern
+  tags: mesos
 
 - name: install Apache Maven Repo
   get_url:
