@@ -30,10 +30,10 @@ The secrets-repo above contains the YAML dictionary (group_vars/all.yaml) used b
 5. for aws, you need to export your aws environment variables (the same ones
    used by the CI-slave-images project):
 
-    export AWS_ACCESS_KEY_ID
-    export AWS_SECRET_ACCESS_KEY
-    export AWS_KEY_PAIR
-    export AWS_KEY_FILENAME
+    * AWS_KEY_PAIR (the KEY_PAIR to use)
+    * AWS_KEY_FILENAME (the full path to your .pem file)
+    * AWS_SECRET_ACCESS_KEY
+    * AWS_ACCESS_KEY_ID
 
 Note that your ssh key referred to by AWS_KEY_FILENAME can't have a passphrase set.
 
