@@ -3,6 +3,8 @@ It is a subset of the existing Ansible code from [ansible-jenkins-showcase](http
 
 To use it:
 
+0. Install vagrant, rake, mkmf and virtualbox
+
 1. clone this repostory
 
         git clone http://github.com/clusterhq/ci-platform.git
@@ -25,7 +27,17 @@ Note: the ansible 'vault' file is not currently used, as soon it is required, it
 
 The secrets-repo above contains the YAML dictionary (group_vars/all.yaml) used by Ansible to configure the instance.
 
-5. Then simply run:
+5. for aws, you need to export your aws environment variables (the same ones
+   used by the CI-slave-images project):
+
+    * AWS_KEY_PAIR (the KEY_PAIR to use)
+    * AWS_KEY_FILENAME (the full path to your .pem file)
+    * AWS_SECRET_ACCESS_KEY
+    * AWS_ACCESS_KEY_ID
+
+Note that your ssh key referred to by AWS_KEY_FILENAME can't have a passphrase set.
+
+6. Then simply run:
 
         rake default aws
 
@@ -34,11 +46,4 @@ The secrets-repo above contains the YAML dictionary (group_vars/all.yaml) used b
 and connect to [http://jenkins:8080](http://jenkins:8080)
 
 you should see a fully deployed, configured jenkins ready to bootstrap EC2 slaves.
-
-for aws, you need to export your aws environment variables.
-
-    export AWS_ACCESS_KEY_ID
-    export AWS_SECRET_KEY
-    export AWS_KEYPAIR_NAME
-    export AWS_KEYPAIR_FILEPATH
 
