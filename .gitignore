@@ -6,7 +6,6 @@
 vendor
 *.pyc
 tags
-Vagrantfile
 group_vars/
 roles/Azulinho.azulinho-*
 roles/joshualund*

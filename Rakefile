@@ -64,33 +64,6 @@ end
 # Vagrantfiles, one for each provider and symlinking them just-in-time
 desc "power up the vagrant boxes"
 task :vagrant_up do
-  ['jenkins'].each do |box|
-    if File.exists?("Vagrantfile")
-      File.unlink("Vagrantfile")
-    end
-    if ARGV.empty?
-      File.symlink("Vagrantfile.vbox", "Vagrantfile")
-      system("vagrant up #{ box } --no-provision")
-    else
-      case ARGV[1]
-        when "vbox"
-          File.symlink("Vagrantfile.vbox", "Vagrantfile")
-          system("vagrant up #{ box } --no-provision")
-        when "lxc"
-          File.symlink("Vagrantfile.lxc", "Vagrantfile")
-          system("vagrant up #{ box } --provider=lxc --no-provision")
-        when "linode"
-          File.symlink("Vagrantfile.linode", "Vagrantfile")
-          system("vagrant up #{ box } --provider=linode --no-provision")
-        when "aws"
-          File.symlink("Vagrantfile.aws", "Vagrantfile")
-          system("vagrant up #{ box } --provider=aws --no-provision")
-        else
-          File.symlink("Vagrantfile.vbox", "Vagrantfile")
-          system("vagrant up #{ box } --no-provision")
-      end
-    end
-  end
+  system("vagrant up jenkins --provider=aws --no-provision")
   system("vagrant provision jenkins")
 end
-
