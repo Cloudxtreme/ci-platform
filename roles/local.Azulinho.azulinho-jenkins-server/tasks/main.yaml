@@ -42,15 +42,21 @@
     regexp='^.:jenkins-.*'
   tags: ['jenkins', 'versionlock']
 
-- name: Ensure jenkins is installed
-  yum: name=jenkins-{{ azulinho_jenkins_server['version']}}
-    enablerepo=epel
-    state=present
-  register: _jenkins_install
+- name: Capture the current jenkins version (if already installed)
+  shell: "rpm -q jenkins --queryformat '%{version}-%{release}'"
+  register: jenkins_installed_version
+  ignore_errors: True
   tags: ['jenkins', 'versionlock']
 
-- name: lock jenkins
-  command: yum versionlock jenkins-{{ azulinho_jenkins_server['version'] }}
+- name: Uninstall jenkins if installed version not equal to configured version
+  yum: name=jenkins state=absent
+  when: azulinho_jenkins_server['version'] != jenkins_installed_version
+  tags: ['jenkins', 'versionlock']
+  notify:
+    - restart jenkins
+
+- name: Install specific version of jenkins
+  yum: name=http://pkg.jenkins-ci.org/redhat-stable/jenkins-{{ azulinho_jenkins_server['version']}}.noarch.rpm
   tags: ['jenkins', 'versionlock']
 
 # configure jenkins to our liking
