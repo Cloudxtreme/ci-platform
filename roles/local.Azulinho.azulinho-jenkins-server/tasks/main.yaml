@@ -42,20 +42,33 @@
     regexp='^.:jenkins-.*'
   tags: ['jenkins', 'versionlock']
 
-- name: Capture the current jenkins version (if already installed)
-  shell: "rpm -q jenkins --queryformat '%{version}-%{release}'"
-  register: jenkins_installed_version
+# checks to see if jenkins is installed
+# if (installed AND current version is not the configured version)
+#   uninstall
+# endif
+# then ensures configured version is installed
+- name: is jenkins currently installed?
+  command: rpm -q jenkins
+  register: is_jenkins_installed
   ignore_errors: True
   tags: ['jenkins', 'versionlock']
 
-- name: Uninstall jenkins if installed version not equal to configured version
+- name: check the current jenkins version (if already installed)
+  shell: "rpm -q jenkins --queryformat '%{version}-%{release}'"
+  register: jenkins_installed_version
+  ignore_errors: True
+  when: is_jenkins_installed.stdout.find('is not installed') == -1
+  tags: ['jenkins', 'versionlock']
+
+- name: uninstall jenkins if installed version not equal to configured version (registers restart)
   yum: name=jenkins state=absent
-  when: azulinho_jenkins_server['version'] != jenkins_installed_version
+  when: ( is_jenkins_installed.stdout.find('is not installed') == -1 ) and  
+        ( azulinho_jenkins_server['version'] != jenkins_installed_version.stdout)
   tags: ['jenkins', 'versionlock']
   notify:
     - restart jenkins
 
-- name: Install specific version of jenkins
+- name: install specified version of jenkins
   yum: name=http://pkg.jenkins-ci.org/redhat-stable/jenkins-{{ azulinho_jenkins_server['version']}}.noarch.rpm
   tags: ['jenkins', 'versionlock']
 
