@@ -72,6 +72,10 @@
   yum: name=http://pkg.jenkins-ci.org/redhat-stable/jenkins-{{ azulinho_jenkins_server['version']}}.noarch.rpm
   tags: ['jenkins', 'versionlock']
 
+- name: lock jenkins
+  command: yum versionlock jenkins-{{ azulinho_jenkins_server['version'] }}
+  tags: ['jenkins', 'versionlock']
+
 # configure jenkins to our liking
 #
 - name: Configure Jenkins Port
