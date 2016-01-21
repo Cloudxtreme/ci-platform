@@ -60,7 +60,7 @@
   when: is_jenkins_installed.stdout.find('is not installed') == -1
   tags: ['jenkins', 'versionlock']
 
-- name: uninstall jenkins if installed version not equal to configured version (registers restart)
+- name: uninstall jenkins if installed version not equal to configured version (notifies restart)
   yum: name=jenkins state=absent
   when: ( is_jenkins_installed.stdout.find('is not installed') == -1 ) and  
         ( azulinho_jenkins_server['version'] != jenkins_installed_version.stdout)
