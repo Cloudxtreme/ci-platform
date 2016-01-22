@@ -3,7 +3,7 @@ It is a subset of the existing Ansible code from [ansible-jenkins-showcase](http
 
 To use it:
 
-0. Install vagrant, rake, mkmf and virtualbox
+0. Install vagrant, rake, mkmf
 
 1. clone this repostory
 
@@ -39,7 +39,7 @@ Note that your ssh key referred to by AWS_KEY_FILENAME can't have a passphrase s
 
 6. Then simply run:
 
-        rake default aws
+        rake default
 
     The first run, takes around 40 minutes, following runs around 9 minutes
 
