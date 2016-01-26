@@ -164,11 +164,8 @@
   tags: ['jenkins', 'jenkins_config']
 
 - name: Copy config contents of acceptance.yaml to config dir
-  # Jinja is nice enough to render our accpetance yaml blob as JSON, but we
-  # have to double escape backslashes so that when this is evaluated as yaml
-  # (or perhaps for when the string is evaluated by the ansible command
-  # processor) they are preserved.
   template: dest=/etc/slave_config/acceptance.yaml
+    src=acceptance.yaml.j2
 
   tags: ['jenkins', 'jenkins_config']
 
