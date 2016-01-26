@@ -168,8 +168,8 @@
   # have to double escape backslashes so that when this is evaluated as yaml
   # (or perhaps for when the string is evaluated by the ansible command
   # processor) they are preserved.
-  copy: content='{{ acceptance["config"] | to_json | replace("\\", "\\\\")}}'
-    dest=/etc/slave_config/acceptance.yaml
+  template: dest=/etc/slave_config/acceptance.yaml
+
   tags: ['jenkins', 'jenkins_config']
 
 - name: Copy ssh key contents of acceptance.yaml to slave dir
