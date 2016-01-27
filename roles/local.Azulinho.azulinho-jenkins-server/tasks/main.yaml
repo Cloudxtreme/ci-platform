@@ -181,8 +181,9 @@
   tags: ['jenkins', 'jenkins_config']
 
 - name: Copy config contents of acceptance.yaml to config dir
-  copy: content="{{ acceptance.config }}"
-    dest=/etc/slave_config/acceptance.yaml
+  template: dest=/etc/slave_config/acceptance.yaml
+    src=acceptance.yaml.j2
+
   tags: ['jenkins', 'jenkins_config']
 
 - name: Copy ssh key contents of acceptance.yaml to slave dir
