@@ -48,9 +48,6 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.Shell>
-      <command>/usr/local/bin/python2.7 /usr/local/bin/render.py</command>
-    </hudson.tasks.Shell>
     <javaposse.jobdsl.plugin.ExecuteDslScripts plugin="job-dsl@1.37">
       <targets>**/*.groovy</targets>
       <usingScriptText>false</usingScriptText>
