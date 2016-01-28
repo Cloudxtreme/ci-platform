@@ -3,6 +3,6 @@
 <jenkins.plugins.slack.SlackNotifier_-DescriptorImpl plugin="slack@1.8.1">
     <teamDomain>{{ cfg.domain }}</teamDomain>
     <token>{{ cfg.token }}</token>
-    <room>{{ cfg.channel | default('') }}</room>
+    <room>{{ cfg.channel }}</room>
     <buildServerUrl>{{ azulinho_jenkins_server['jenkins_url'] }}</buildServerUrl>
 </jenkins.plugins.slack.SlackNotifier_-DescriptorImpl>
