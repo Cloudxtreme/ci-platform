@@ -171,6 +171,22 @@
   notify:
     - safe-restart jenkins
 
+- name: Deploy Slack plugin config
+  template: dest=/var/lib/jenkins/jenkins.plugins.slack.SlackNotifier.xml
+    src=jenkins.plugins.slack.SlackNotifier.xml.j2
+  tags: ['jenkins', 'jenkins_config']
+  notify:
+    - safe-restart jenkins
+
+- name: update jenkins Slack plugin config
+  file: path=/var/lib/jenkins/jenkins.plugins.slack.SlackNotifier.xml
+        state=file
+        owner=jenkins
+        group=jenkins
+  tags: ['jenkins', 'jenkins_config']
+  notify:
+    - safe-restart jenkins
+
 # Configure files to be deployed to the slaves
 - name: Create /etc/slave_config
   file: path=/etc/slave_config

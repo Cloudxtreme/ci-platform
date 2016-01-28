@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+{% set cfg=azulinho_jenkins_server.credentials.slack %}
+<jenkins.plugins.slack.SlackNotifier_-DescriptorImpl plugin="slack@1.8.1">
+    <teamDomain>{{ cfg.domain }}</teamDomain>
+    <token>{{ cfg.token }}</token>
+    <room>{{ cfg.channel }}</room>
+    <buildServerUrl>{{ azulinho_jenkins_server['jenkins_url'] }}</buildServerUrl>
+</jenkins.plugins.slack.SlackNotifier_-DescriptorImpl>
