@@ -3,31 +3,33 @@ It is a subset of the existing Ansible code from [ansible-jenkins-showcase](http
 
 To use it:
 
-0. Install vagrant, rake, mkmf
+1. Install vagrant (1.8), virtualbox, rake, mkmf (in ruby-dev on Debian)
 
 1. clone this repostory
 
         git clone http://github.com/clusterhq/ci-platform.git
         cd ci-platform
 
-2. clone the secrets repository:
+1. clone the secrets repository:
 
         git clone http://github.com/clusterhq/segredos.git
 
-3. Symlink the secrets to group_vars
+1. Symlink the secrets to group_vars
 
         ln -s segredos/ci-platform group_vars
 
-4. install ansible:
+1. install ansible:
 
         pip2 install ansible==1.9.2
 
 
 Note: the ansible 'vault' file is not currently used, as soon it is required, it should be moved to the secrets-repo and symlinked.
 
-The secrets-repo above contains the YAML dictionary (group_vars/all.yaml) used by Ansible to configure the instance.
+The secrets-repo above contains the YAML dictionary (group_vars/all/all.yaml) used by Ansible to configure the instance.
 
-5. for aws, you need to export your aws environment variables (the same ones
+1. Extract the jenkins-master key pair into a .pem file. It can be found in group_vars/all/all.yaml under env.default.ssh.ssh_keys.contents. You will need to tidy it upa bit by removing the quotes and other punctuation from each line.
+
+1. for aws, you need to export your aws environment variables (the same ones
    used by the CI-slave-images project):
 
     * AWS_KEY_PAIR (the KEY_PAIR to use)
