@@ -115,4 +115,4 @@
     - resmo.fail2ban
 
     # apply sysctl settings
-    - picotrading/ansible-sysctl
+    - jtyr.sysctl
