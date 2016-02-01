@@ -24,6 +24,8 @@ ansible_roles = [
   'bennojoy.ntp',
   'Azulinho.azulinho-python27',
   'Azulinho.azulinho-ssh-keys',
+  'resmo.fail2ban',
+  'picotrading/ansible-sysctl'
 ]
 
 # execute 'rake', and all pre-requirements should be installed and the VM
