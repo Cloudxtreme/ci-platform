@@ -240,7 +240,12 @@
 - name: create dockerhub creds file in /etc/slave_config
   copy: dest=/etc/slave_config/dockerhub_creds
     content="{{ credentials['dockerhub']['user']}}:{{ credentials['dockerhub']['password']}}:{{credentials['dockerhub']['email']}}"
-  tags: ['jenkins', 'jenkins_config']
+  tags: ['jenkins', 'jenkins_config', 'jenkins_secrets']
+
+- name: deploy jenkins-slave private key to /etc/slave_config
+  copy: dest=/etc/slave_config/jenkins-slave.ssh.private_key
+    content="{{ cloud_pem_keys['jenkins_slave_private_key'] | join('\n') }}"
+  tags: ['jenkins', 'jenkins_config', 'jenkins_slave_setup', 'jenkins_secrets']
 
 - name: Deploy jenkins slave-setup config
   template: dest=/var/lib/jenkins/org.jenkinsci.plugins.slave_setup.SetupConfig.xml
