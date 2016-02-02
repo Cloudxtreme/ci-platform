@@ -62,7 +62,7 @@
 
 - name: uninstall jenkins if installed version not equal to configured version (notifies restart)
   yum: name=jenkins state=absent
-  when: ( is_jenkins_installed.stdout.find('is not installed') == -1 ) and  
+  when: ( is_jenkins_installed.stdout.find('is not installed') == -1 ) and
         ( azulinho_jenkins_server['version'] != jenkins_installed_version.stdout)
   tags: ['jenkins', 'versionlock']
   notify:
@@ -260,13 +260,17 @@
   notify:
     - safe-restart jenkins
 
-- name: increase jenkins JVM heap-size
+# for info on these options see:
+# https://wiki.jenkins-ci.org/display/JENKINS/Features+controlled+by+system+properties
+# https://github.com/jenkinsci/mesos-plugin#over-provisioning-flags
+# https://cloudbees.zendesk.com/hc/en-us/articles/204690520-Why-do-slaves-show-as-suspended-while-jobs-wait-in-the-queue-
+# https://github.com/jenkinsci/jenkins/blob/master/core/src/main/java/hudson/slaves/NodeProvisioner.java
+- name: Adjust the Jenkins startup Java arguments (notifies restart)
   lineinfile:
     dest=/etc/sysconfig/jenkins
     line='JENKINS_JAVA_OPTIONS="-Dhudson.model.LoadStatistics.decay=0.9 -Dhudson.slaves.NodeProvisioner.MARGIN=5 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.1 -Djava.awt.headless=true -Xmx8192m -Dorg.eclipse.jetty.server.Request.maxFormContentSize=5000000 "'
     state=present
   tags: ['jenkins', 'jenkins_config', 'jenkins_jvm']
-  notify:
   notify:
     - restart jenkins
 
