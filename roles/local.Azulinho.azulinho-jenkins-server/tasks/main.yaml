@@ -406,7 +406,7 @@
 
 - name: Retrieve the CloudBees password from Jenkins
   shell: java -jar {{ azulinho_jenkins_server['cli_dest'] }} -s http://localhost:{{ azulinho_jenkins_server['port'] }}/ groovy {{ azulinho_jenkins_server['lib'] }}/cloudbees.groovy
-  tags: ['jenkins', 'jenkins_config', 'cloudbees']
+  tags: ['jenkins', 'jenkins_config', 'cloudbees', 'xml_conf_files']
   register: cloudbees_encrypted_password
   notify:
     - safe-restart jenkins
@@ -441,6 +441,22 @@
   notify:
     - safe-restart jenkins
 
+- name: Create directories for slave node configuration
+  file: path={{ azulinho_jenkins_server['lib'] }}/nodes/{{ item.key }} state=directory
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'cloudbees']
+  with_dict: "azulinho_jenkins_server['static_slaves']"
+
+- name: Create slave node file for nodes
+  template: dest={{ azulinho_jenkins_server['lib'] }}/nodes/{{ item.key }}/config.xml
+    src=nodes/node_name/config.xml.j2
+    owner=jenkins
+    group=jenkins
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files', 'cloudbees']
+  with_dict: "azulinho_jenkins_server['static_slaves']"
+  notify:
+    - safe-restart jenkins
+
+
 # Deploy the CloudBees Slave Configuration templates
 # we use these to specify which size our slaves should be
 - name: Create cloudbees CloudSlaveTemplates dir
@@ -471,4 +487,3 @@
     dest=/etc/hosts
     line='{{ansible_ec2_public_ipv4}} {{ ansible_hostname }}'
   tags: ['jenkins', 'hosts', 'mesos']
-
