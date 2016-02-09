@@ -41,10 +41,14 @@
           <tags>
 {%                  for tag in t.tags %}
             <hudson.plugins.ec2.EC2Tag>
-            <name>{{ tag.name }}</name>
-            <value>{{ tag.value }}</value>
+              <name>{{ tag.name }}</name>
+              <value>{{ tag.value }}</value>
             </hudson.plugins.ec2.EC2Tag>
 {%                  endfor            %}
+            <hudson.plugins.ec2.EC2Tag>
+              <name>jenkins_master</name>
+              <value>{{ansible_ec2_public_ipv4}} {{ ansible_hostname }}</value>
+            </hudson.plugins.ec2.EC2Tag>
           </tags>
           <usePrivateDnsName>{{ t.usePrivateDnsName |default('false')}}</usePrivateDnsName>
           <associatePublicIp>{{ t.associatePublicIp | default('false')}}</associatePublicIp>
