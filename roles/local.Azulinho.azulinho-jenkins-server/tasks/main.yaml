@@ -290,7 +290,7 @@
 - name: Adjust the Jenkins startup Java arguments (notifies restart)
   lineinfile:
     dest=/etc/sysconfig/jenkins
-    line='JENKINS_JAVA_OPTIONS="-Dhudson.model.LoadStatistics.decay=0.9 -Dhudson.slaves.NodeProvisioner.MARGIN=5 -Dhudson.slaves.NodeProvisioner.MARGIN0=0.1 -Djava.awt.headless=true -Xmx8192m -Dorg.eclipse.jetty.server.Request.maxFormContentSize=5000000 "'
+    line='JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Xmx8192m -Dorg.eclipse.jetty.server.Request.maxFormContentSize=5000000 "'
     state=present
   tags: ['jenkins', 'jenkins_config', 'jenkins_jvm']
   notify:
