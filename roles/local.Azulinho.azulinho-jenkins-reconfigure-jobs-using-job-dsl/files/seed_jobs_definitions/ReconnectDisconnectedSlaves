@@ -36,7 +36,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
     <hudson.triggers.TimerTrigger>
-      <spec>H/15 * * * * </spec>
+      <spec>H/35 * * * * </spec>
     </hudson.triggers.TimerTrigger>
   </triggers>
   <concurrentBuild>false</concurrentBuild>
@@ -63,7 +63,7 @@ for (slave in Jenkins.instance.slaves) {
 }
 
 if (OfflineSlaves.size != 0) {
-   sleep(600000)
+   sleep(1000 * 60 * 30)
 }
 
 for (slave in OfflineSlaves) {
@@ -84,7 +84,7 @@ for (slave in OfflineSlaves) {
   <buildWrappers>
     <hudson.plugins.build__timeout.BuildTimeoutWrapper plugin="build-timeout@1.14">
       <strategy class="hudson.plugins.build_timeout.impl.AbsoluteTimeOutStrategy">
-        <timeoutMinutes>14</timeoutMinutes>
+        <timeoutMinutes>34</timeoutMinutes>
       </strategy>
       <operationList>
         <hudson.plugins.build__timeout.operations.AbortOperation/>
