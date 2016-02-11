@@ -332,6 +332,13 @@
   notify:
     - safe-restart jenkins
 
+- name: Configure log recorders
+  copy: dest={{ azulinho_jenkins_server['lib'] }}/log
+    src=log/
+  tags: ['jenkins', 'jenkins_config', 'xml_conf_files']
+  notify:
+    - safe-restart jenkins
+
 # Start jenkins, we need it up and running before we are able to download
 # the CLI tool
 - name: Ensure jenkins is running
